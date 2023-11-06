@@ -1,11 +1,29 @@
 {
   "name": "web-kakao-talk",
   "version": "1.0.0",
-  "description": "카카오톡 웹 버전",
-  "main": "index.js",
+  "description": "Cloning Kakao Talk in Web (실시간 채팅 구현)",
   "scripts": {
-    "start": "node index.js"
+    "dev": "nodemon --exec babel-node src/server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jrsky723/web-kakao-talk.git"
   },
   "author": "jrsky723",
-  "license": "MIT"
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jrsky723/web-kakao-talk/issues"
+  },
+  "homepage": "https://github.com/jrsky723/web-kakao-talk#readme",
+  "dependencies": {
+    "express": "^4.18.2",
+    "morgan": "^1.10.0",
+    "pug": "^3.0.2"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.23.2",
+    "@babel/node": "^7.22.19",
+    "@babel/preset-env": "^7.23.2",
+    "nodemon": "^3.0.1"
+  }
 }
