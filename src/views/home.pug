@@ -1,6 +1,10 @@
 extends base.pug
+include mixins/chatRoom
 
 block content
-    h1 home
-    input(placeholder="Enter your name")
-    button send
+    h2 Welcome here you will see the list of chatting rooms
+    ul
+        each room in chatRooms
+            +chatRoom(room)
+        else
+            li There is no room yet
