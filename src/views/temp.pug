@@ -22,6 +22,7 @@ head
     });
     // 돔
     const nickname = document.querySelector("#nickname");
+    const chatRoom = 0; // 방 마다 room id가 따로 있게끔 설계
     const chatList = document.querySelector(".chatting-list");
     const chatInput = document.querySelector(".chatting-input");
     const now = new Date();
@@ -29,7 +30,8 @@ head
     // sendButton 클릭시 이벤트 구현
     sendButton.addEventListener("click", ()=>{
         const param = {
-        id : nickname.value,
+        inputUserId : nickname.value,
+        roomId : chatRoom,
         msg : chatInput.value,
         inputTime : now.toString()
         }
