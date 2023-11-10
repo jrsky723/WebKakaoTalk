@@ -1,12 +1,26 @@
-// socket.io를 통한 패킷 교환
+import chatRouter from "../routers/chatRouter";
+import mysql from'mysql2';
+import dbconfig from '../database.js';
+
+const connection = mysql.createConnection(dbconfig);
+
+
+let sql = "INSERT INTO chats (userID, roomID, message, inputTime) VALUES (?, ?, ?, ?)";
+
 module.exports = (io)=>{
     io.on("connection", (socket)=>{
         socket.on("chatting", (data)=>{
-        console.log(data);
-        //여기에 들어오는 패킷을 채팅들이다
+            console.log(data);
+            connection.query(sql, data, function(err, results, fields) {
+                if(err) {
+                    console.log(err);
+                } else {
+                    console.log(results);
+                }
+            });
         });
         socket.on("disconnect", (data) =>{
-        console.log("disconnect");
+            console.log("disconnect");
         })
     })
 };

@@ -7,6 +7,10 @@ import socketIO from "socket.io";
 import socketController from './socket/socket';
 import { disconnect } from "process";
 import chatRouter from "./routers/chatRouter";
+import mysql from'mysql2';
+import dbconfig from './database.js';
+
+const connection = mysql.createConnection(dbconfig);
 
 const PORT = 4000;
 
@@ -15,6 +19,8 @@ const logger = morgan("dev");
 
 const server = http.createServer(app);
 const io = socketIO(server);
+socketController(io);
+
 
 app.use(express.static('public'));
 app.set("view engine", "pug");
@@ -25,7 +31,6 @@ app.use("/", globalRouter);
 app.use("/users", userRouter);
 app.use("/chats", chatRouter);
 
-socketController(io);
 
 const handleListening = () =>
   console.log(`✅ Server listenting on port http://localhost:${PORT} 🚀`);

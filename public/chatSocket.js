@@ -1,22 +1,21 @@
 window.onload = function() {
-    "use strict" // JS 엄격모드
-    // 열려있는 서버와 연결
+    "use strict"
+
     const socket = io();
-    // 돔
+
     const nickname = document.querySelector("#nickname");
     const chatRoom = 0; // 방 마다 room id가 따로 있게끔 설계
     const chatInput = document.querySelector(".chatting-input");
     const now = new Date();
     const sendButton = document.querySelector(".send-button");
-    // sendButton 클릭시 이벤트 구현
+
+    //TODO : 최대 글자 수 제한 넣기
     sendButton.addEventListener("click", ()=>{
-        const param = {
-            inputUserId : nickname.value,
-            roomId : chatRoom,
-            msg : chatInput.value,
-            inputTime : now.toString()
-        }
-    // 메시지를 보내는 코드
+        const param = [
+            nickname.value,
+             chatRoom,
+              chatInput.value, 
+              now.toString()];
         socket.emit('chatting', param);
         chatInput.value = '';
     })
