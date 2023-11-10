@@ -18,6 +18,7 @@ const logger = morgan("dev");
 const server = http.createServer(app);
 const io = socketIO(server);
 
+app.use(express.static('public'));
 app.set("view engine", "pug");
 app.set("views", process.cwd() + "/src/views");
 app.use(logger);
@@ -30,4 +31,4 @@ socketController(io);
 const handleListening = () =>
   console.log(`✅ Server listenting on port http://localhost:${PORT} 🚀`);
 
-  server.listen(PORT, handleListening);
+server.listen(PORT, handleListening);
