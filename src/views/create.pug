@@ -1,0 +1,6 @@
+extends base.pug
+
+block content
+    form(method="POST" action="/chats/create")
+        input(name="title" placeholder="Title", required, type="text")
+        input(type="submit", value="Create Room")
