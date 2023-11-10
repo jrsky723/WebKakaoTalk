@@ -1,15 +1,10 @@
-"use strict" // JS 엄격모드
+window.onload = function() {
+    "use strict" // JS 엄격모드
     // 열려있는 서버와 연결
-
-    // const socket = io.connect('http://localhost:4000', {
-    //     path: '/server.js',
-    //     transports: ['websocket']
-    // });
     const socket = io();
     // 돔
     const nickname = document.querySelector("#nickname");
     const chatRoom = 0; // 방 마다 room id가 따로 있게끔 설계
-    const chatList = document.querySelector(".chatting-list");
     const chatInput = document.querySelector(".chatting-input");
     const now = new Date();
     const sendButton = document.querySelector(".send-button");
@@ -30,3 +25,4 @@
     socket.on("chatting", (data)=>{
     })
     console.log(socket);
+}
