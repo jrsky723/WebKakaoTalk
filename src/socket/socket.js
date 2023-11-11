@@ -2,9 +2,9 @@ import messageTable from "../models/Message";
 
 const saveMessage = (data) => {
     messageTable.create({
-        content: data[0],
-        userId: data[1],
-        chatRoomId: data[2],
+        content: data.content,
+        userId: data.userId,
+        chatRoomId: data.chatRoomId,
     });
 };
 

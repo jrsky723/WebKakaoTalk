@@ -10,11 +10,11 @@ window.onload = function() {
 
     sendButton.addEventListener("click", ()=>{
         if(content.value.length <= 100){
-            const param = [
-                content.value, 
-                parseInt(userId.value),
-                parseInt(chatRoomId),
-            ];
+            const param = {
+                content : content.value, 
+                userId : parseInt(userId.value),
+                chatRoomId : parseInt(chatRoomId),
+            };
             
             socket.emit('chatting', param);
         }
