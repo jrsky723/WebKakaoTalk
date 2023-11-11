@@ -53,3 +53,7 @@ export const postCreate = (req, res) => {
   chatRooms.push(newRoom);
   return res.redirect("/");
 };
+
+export const test = (req, res) => {
+  return res.render("test");
+}

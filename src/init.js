@@ -1,7 +1,7 @@
 import "dotenv/config";
 import sequelize from "./db";
 import setAssociations from "./models";
-import app from "./server";
+import server from "./server";
 
 const PORT = process.env.PORT || 4000;
 
@@ -15,7 +15,7 @@ async function startServer() {
     setAssociations();
     await sequelize.sync();
     handleDBConnection();
-    app.listen(PORT, handleListening);
+    server.listen(PORT, handleListening);
   } catch (error) {
     console.log(error);
   }

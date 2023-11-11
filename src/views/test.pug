@@ -1,0 +1,12 @@
+doctype html
+head
+  meta(charset='utf-8')
+  title Document
+  script(src='/socket.io/socket.io.js')
+  script(src='/chatRoomSocket.js')
+body
+  div 사용자 : 
+    input#nickname(type='text' <='' div='')
+    br
+    input.chatting-input(type='test')
+    button.send-button 전송
