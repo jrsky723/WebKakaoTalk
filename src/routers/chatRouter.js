@@ -5,7 +5,7 @@ import {
   postEdit,
   getCreate,
   postCreate,
-} from "../controllers/chatController";
+} from "../controllers/chatRoomController";
 
 const chatRouter = express.Router();
 
