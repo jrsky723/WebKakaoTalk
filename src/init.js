@@ -1,7 +1,7 @@
 import "dotenv/config";
 import sequelize from "./db";
+import setAssociations from "./models";
 import app from "./server";
-import User from "./models/User";
 
 const PORT = process.env.PORT || 4000;
 
@@ -12,16 +12,10 @@ const handleDBConnection = () => console.log("✅ DB Connected. 🚀");
 
 async function startServer() {
   try {
+    setAssociations();
     await sequelize.sync();
     handleDBConnection();
     app.listen(PORT, handleListening);
-    // test
-    // const user = await User.create({
-    //   username: "test",
-    //   email: "124@naver.com",
-    //   password: "1234",
-    // });
-    // console.log(user);
   } catch (error) {
     console.log(error);
   }
