@@ -1,8 +1,27 @@
 import ChatRoom from "../models/ChatRoom";
+import User from "../models/User";
 
 export const rooms = async (req, res) => {
-  const chatRooms = await ChatRoom.findAll();
-  return res.render("chat-rooms/list", { pageTitle: "Chat Rooms", chatRooms });
+  try {
+    const chatRooms = await ChatRoom.findAll({
+      include: {
+        model: User,
+        attributes: { exclude: ["password"] },
+        through: {
+          attributes: [],
+        },
+      },
+    });
+    return res.render("chat-rooms/list", {
+      pageTitle: "Chat Rooms",
+      chatRooms,
+    });
+  } catch (error) {
+    return res.render("chat-rooms/list", {
+      pageTitle: "Chat Rooms",
+      errorMessage: error.message,
+    });
+  }
 };
 
 export const see = async (req, res) => {
@@ -43,11 +62,24 @@ export const getCreate = (req, res) => {
 
 export const postCreate = async (req, res) => {
   const { name } = req.body;
-  await ChatRoom.create({
-    name: name,
-    max: 10,
-  });
-  return res.redirect("/");
+  try {
+    const chatRoom = await ChatRoom.create({
+      name: name,
+      max: 10,
+    });
+
+    //test user
+    const userId = 1;
+    const user = await User.findByPk(userId);
+    await chatRoom.addUser(user);
+
+    return res.redirect("/");
+  } catch (error) {
+    return res.render("chat-rooms/create", {
+      pageTitle: "Create Room",
+      errorMessage: error.message,
+    });
+  }
 };
 
 export const remove = async (req, res) => {

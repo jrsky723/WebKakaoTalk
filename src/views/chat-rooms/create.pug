@@ -1,6 +1,8 @@
 extends ../base.pug
 
 block content
+    if errorMessage
+        span= errorMessage
     form(method="POST" action="/chats/create")
         input(name="name" placeholder="Title", required, type="text")
         input(type="submit", value="Create Room")
