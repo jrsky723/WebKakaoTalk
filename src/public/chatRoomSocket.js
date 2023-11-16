@@ -6,7 +6,6 @@ window.onload = function() {
     socket.on("init", (data)=>{
         console.log('init event');
         const chat = document.querySelector("ul");
-        chat.innerHTML = '';
         for(let i = 0; i < data.length; i++){
             const li = document.createElement("li");
             let formattedDate = formatDate(new Date(data[i].createdAt));

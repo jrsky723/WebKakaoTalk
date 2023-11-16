@@ -45,7 +45,6 @@ const initChatRoom = (io)=>{
         } else {
             console.log("레이블이 없습니다.");
         }
-        io.emit("new item", result);
     }).catch((err) => {
         console.error(err);
         console.log("레이블 조회 실패");
