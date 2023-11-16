@@ -1,13 +1,7 @@
-extends ../base.pug
-include ../mixins/chat-room
+extends ../base
+include ../mixins/chat-room-list
 
 block content
     h2 Welcome here you will see the list of chatting rooms
-    ul
-        each room in chatRooms
-            +chatRoom(room)
-        else
-            li There is no room yet
-    ul
-        li
-            a(href="/chats/create") Create New Room
+
+    +chatRoomList(chatRooms)

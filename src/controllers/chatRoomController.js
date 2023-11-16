@@ -2,27 +2,21 @@ import ChatRoom from "../models/ChatRoom";
 import User from "../models/User";
 import Message from "../models/Message";
 
-export const rooms = async (req, res) => {
-  try {
-    const chatRooms = await ChatRoom.findAll({
-      include: {
-        model: User,
-        attributes: { exclude: ["password"] },
-        through: {
-          attributes: [],
-        },
+export const home = async (req, res) => {
+  const pageTitle = "Chat Rooms";
+  const chatRooms = await ChatRoom.findAll({
+    include: {
+      model: User,
+      attributes: { exclude: ["password"] },
+      through: {
+        attributes: [],
       },
-    });
-    return res.render("chat-rooms/list", {
-      pageTitle: "Chat Rooms",
-      chatRooms,
-    });
-  } catch (error) {
-    return res.render("chat-rooms/list", {
-      pageTitle: "Chat Rooms",
-      errorMessage: error.message,
-    });
-  }
+    },
+  });
+  return res.render("home", {
+    pageTitle,
+    chatRooms,
+  });
 };
 
 export const see = async (req, res) => {
@@ -63,6 +57,7 @@ export const getCreate = (req, res) => {
 
 export const postCreate = async (req, res) => {
   const { name } = req.body;
+  const pageTitle = "Create Room";
   try {
     const chatRoom = await ChatRoom.create({
       name: name,
@@ -77,7 +72,7 @@ export const postCreate = async (req, res) => {
     return res.redirect("/");
   } catch (error) {
     return res.render("chat-rooms/create", {
-      pageTitle: "Create Room",
+      pageTitle: pageTitle,
       errorMessage: error.message,
     });
   }

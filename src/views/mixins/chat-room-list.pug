@@ -1,0 +1,8 @@
+include ../mixins/chat-room
+
+mixin chatRoomList(chatRooms)
+    ul
+        each room in chatRooms
+            +chatRoom(room)
+        else
+            li There is no room yet

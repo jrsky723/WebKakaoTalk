@@ -1,0 +1,8 @@
+extends base
+include mixins/chat-room-list
+include mixins/navigator
+
+block content
+    +navigator(loggedInUser)
+    
+    +chatRoomList(chatRooms)

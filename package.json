@@ -16,14 +16,15 @@
   },
   "homepage": "https://github.com/jrsky723/web-kakao-talk#readme",
   "dependencies": {
+    "bcrypt": "^5.1.1",
+    "connect-session-sequelize": "^7.1.7",
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
-    "moment": "^2.29.4",
+    "express-session": "^1.17.3",
     "morgan": "^1.10.0",
     "mysql2": "^3.6.3",
     "pug": "^3.0.2",
-    "sequelize": "^6.34.0",
-    "sqlite3": "^5.1.6"
+    "sequelize": "^6.34.0"
   },
   "devDependencies": {
     "@babel/core": "^7.23.2",
