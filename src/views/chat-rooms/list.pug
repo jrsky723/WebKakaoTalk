@@ -1,8 +1,9 @@
-extends ../base.pug
+extends ../base
 include ../mixins/chat-room
 
 block content
     h2 Welcome here you will see the list of chatting rooms
+
     ul
         each room in chatRooms
             +chatRoom(room)

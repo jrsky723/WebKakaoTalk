@@ -7,4 +7,7 @@ html(lang="ko")
         header
             h1=pageTitle
     main
+        if errorMessage
+            span=errorMessage
         block content
+        

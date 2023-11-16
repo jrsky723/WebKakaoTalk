@@ -1,5 +1,6 @@
 import { DataTypes } from "sequelize";
 import sequelize from "../db";
+import bcrypt from "bcrypt";
 
 const User = sequelize.define("User", {
   id: {
@@ -16,10 +17,25 @@ const User = sequelize.define("User", {
     allowNull: false,
     unique: true,
   },
+  name: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  avatarURL: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
   password: {
     type: DataTypes.STRING,
     allowNull: false,
   },
+});
+
+User.beforeCreate(async (user) => {
+  if (!user.avatarURL) {
+    user.avatarURL = `https://api.dicebear.com/7.x/identicon/svg?seed=${user.username}`;
+  }
+  user.password = await bcrypt.hash(user.password, 10);
 });
 
 export default User;

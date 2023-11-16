@@ -2,6 +2,7 @@ import ChatRoom from "../models/ChatRoom";
 import User from "../models/User";
 
 export const rooms = async (req, res) => {
+  const pageTitle = "Chat Rooms";
   try {
     const chatRooms = await ChatRoom.findAll({
       include: {
@@ -13,12 +14,12 @@ export const rooms = async (req, res) => {
       },
     });
     return res.render("chat-rooms/list", {
-      pageTitle: "Chat Rooms",
+      pageTitle,
       chatRooms,
     });
   } catch (error) {
     return res.render("chat-rooms/list", {
-      pageTitle: "Chat Rooms",
+      pageTitle,
       errorMessage: error.message,
     });
   }
@@ -62,6 +63,7 @@ export const getCreate = (req, res) => {
 
 export const postCreate = async (req, res) => {
   const { name } = req.body;
+  const pageTitle = "Create Room";
   try {
     const chatRoom = await ChatRoom.create({
       name: name,
@@ -76,7 +78,7 @@ export const postCreate = async (req, res) => {
     return res.redirect("/");
   } catch (error) {
     return res.render("chat-rooms/create", {
-      pageTitle: "Create Room",
+      pageTitle: pageTitle,
       errorMessage: error.message,
     });
   }

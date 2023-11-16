@@ -13,7 +13,7 @@ const handleDBConnection = () => console.log("✅ DB Connected. 🚀");
 async function startServer() {
   try {
     setAssociations();
-    await sequelize.sync();
+    await sequelize.sync({ force: true });
     handleDBConnection();
     app.listen(PORT, handleListening);
   } catch (error) {

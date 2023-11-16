@@ -1,7 +1,12 @@
-extends base.pug
+extends ../base
 
 block content
-    h1 login
-    input(placeholder="Enter your name")
-    button send
-```
+    form(method="POST")
+        input(placeholder="Username", name="username", type="text", required)
+        input(placeholder="Password", name="password", type="password", required)
+        input(type="submit", value="Login")
+        br
+    hr
+    div
+        span Don't have an account? 
+        a(href="/join") Create one now &rarr;
