@@ -1,4 +1,7 @@
 doctype html
+mixin message(chat)
+  li #{chat.userId}
+
 head
   meta(charset='utf-8')
   title Document
@@ -6,7 +9,9 @@ head
   script(src='/chatRoomSocket.js')
 body
   div 사용자 : 
-    input#userID(type='text' <='' div='')
+    input.userID(type='text')
     br
-    input.chatting-input(type='test')
+    ul.chatting-list
+
+    input.chatting-input(type='text')
     button.send-button 전송

@@ -1,5 +1,6 @@
 import ChatRoom from "../models/ChatRoom";
 import User from "../models/User";
+import Message from "../models/Message";
 
 export const rooms = async (req, res) => {
   try {
@@ -87,4 +88,19 @@ export const remove = async (req, res) => {
   const chatRoom = await ChatRoom.findByPk(id);
   await chatRoom.destroy();
   return res.redirect("/");
+};
+
+export const getTest = async (req, res) => {
+  try {
+    let chats = await Message.findAll({
+      where: { chatRoomId: 1 },
+    });
+    return res.render("test", {
+      chats,
+    });
+  } catch (error) {
+    return res.render("test", {
+      errorMessage: error.message,
+    });
+  }
 };
