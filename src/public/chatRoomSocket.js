@@ -3,7 +3,7 @@ window.onload = function() {
     const socket = io();
     
     const content = document.querySelector(".chatting-input");
-    const userId = document.querySelector("#nickname");
+    const userId = document.querySelector("#userID");
     const chatRoomId = 1; // 방 마다 room id가 다르게 설정
 
     const sendButton = document.querySelector(".send-button");
