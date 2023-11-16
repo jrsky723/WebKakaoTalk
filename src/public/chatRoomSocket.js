@@ -3,7 +3,17 @@ window.onload = function() {
     
     const socket = io();
     
-
+    socket.on("init", (data)=>{
+        console.log('init event');
+        const chat = document.querySelector("ul");
+        chat.innerHTML = '';
+        for(let i = 0; i < data.length; i++){
+            const li = document.createElement("li");
+            let formattedDate = formatDate(new Date(data[i].createdAt));
+            li.innerText = `${data[i].userId} : ${data[i].content} (${formattedDate})`;
+            chat.appendChild(li);
+        }
+    });
 
     const sendButton = document.querySelector(".send-button");
 
@@ -13,11 +23,6 @@ window.onload = function() {
             userId : userId.value,
             chatRoomId : chatRoomId,
         };
-        console.log(param);
-        console.log('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
-        if(param.content == null && param.userId == null) {
-            return alert('내용을 입력해주세요.');
-        }
         socket.emit('chatting', param);
         content.value = '';
         param.userId.value = '';
@@ -49,7 +54,7 @@ window.onload = function() {
         hours = hours < 10 ? '0' + hours : hours;
         minutes = minutes < 10 ? '0' + minutes : minutes;
 
-        return `${month}/${day} ${hours}:${minutes}`
+        return `${month}/${day} ${hours}:${minutes}`;
     }
 
     socket.on("new item", (data)=>{
@@ -60,4 +65,6 @@ window.onload = function() {
         li.innerText = `${data[0].userId} : ${data[0].content} (${formattedDate})`;
         chat.appendChild(li);
     });
+
+    
 }

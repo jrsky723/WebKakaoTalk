@@ -16,12 +16,32 @@ const saveMessage = async (data) => {
 
 const updateClient = (io)=>{
      messageTable.findAll({
+        where: { chatRoomId: 1 }, // 방이 있을 시 그 방의 ID로 설정
         order: [["createdAt", "DESC"]],
         limit: 1
     }).then((result) => {
         if (result.length > 0) {
             const lastLabel = result[0];
-            console.log("마지막 레이블 조회 성공:", lastLabel);
+            console.log("마지막 레이블 조회 성공");
+            io.emit("new item", result);
+        } else {
+            console.log("레이블이 없습니다.");
+        }
+        
+    }).catch((err) => {
+        console.error(err);
+        console.log("레이블 조회 실패");
+    });
+}
+
+const initChatRoom = (io)=>{
+    messageTable.findAll({
+        order: [["createdAt", "ASC"]],
+        where: { chatRoomId: 1 }, // 방이 있을 시 그 방의 ID로 설정
+    }).then((result) => {
+        if (result.length > 0) {
+            console.log("전체 레이블 조회 성공");
+            io.emit("init", result);
         } else {
             console.log("레이블이 없습니다.");
         }
@@ -34,11 +54,14 @@ const updateClient = (io)=>{
 
 module.exports = (io)=>{
     io.on("connection", (socket)=>{
+        initChatRoom(io);
+
         socket.on("chatting", async (data)=>{
             console.log('chatting event');
             await saveMessage(data);
             updateClient(io);
         });
+
         socket.on("disconnect", (data) =>{
             console.log("disconnect");
         })
