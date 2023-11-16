@@ -1,6 +1,6 @@
 import express from "express";
 import { login, join, logout } from "../controllers/userController";
-import { rooms } from "../controllers/chatController";
+import { rooms } from "../controllers/chatRoomController";
 
 const globalRouter = express.Router();
 
