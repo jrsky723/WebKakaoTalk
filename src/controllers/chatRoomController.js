@@ -1,28 +1,21 @@
 import ChatRoom from "../models/ChatRoom";
 import User from "../models/User";
 
-export const rooms = async (req, res) => {
+export const home = async (req, res) => {
   const pageTitle = "Chat Rooms";
-  try {
-    const chatRooms = await ChatRoom.findAll({
-      include: {
-        model: User,
-        attributes: { exclude: ["password"] },
-        through: {
-          attributes: [],
-        },
+  const chatRooms = await ChatRoom.findAll({
+    include: {
+      model: User,
+      attributes: { exclude: ["password"] },
+      through: {
+        attributes: [],
       },
-    });
-    return res.render("chat-rooms/list", {
-      pageTitle,
-      chatRooms,
-    });
-  } catch (error) {
-    return res.render("chat-rooms/list", {
-      pageTitle,
-      errorMessage: error.message,
-    });
-  }
+    },
+  });
+  return res.render("home", {
+    pageTitle,
+    chatRooms,
+  });
 };
 
 export const see = async (req, res) => {

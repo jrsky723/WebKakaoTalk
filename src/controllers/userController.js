@@ -1,9 +1,10 @@
-import { Op } from "sequelize";
 import User from "../models/User";
+import { Op } from "sequelize";
+import bcrypt from "bcrypt";
 
 export const edit = (req, res) => res.send("Edit User");
 export const remove = (req, res) => res.send("Remove User");
-export const logout = (req, res) => res.send("Logout");
+
 export const see = (req, res) => res.send("See User");
 
 export const getJoin = (req, res) => {
@@ -48,9 +49,36 @@ export const postJoin = async (req, res) => {
     });
   }
 };
+
 export const getLogin = (req, res) => {
   return res.render("users/login", { pageTitle: "Login" });
 };
-export const postLogin = (req, res) => {
-  return res.redirect("/");
+export const postLogin = async (req, res) => {
+  const { username, password } = req.body;
+  const pageTitle = "Login";
+  const user = await User.findOne({ where: { username } });
+  if (!user) {
+    return res.status(400).render("users/login", {
+      pageTitle,
+      errorMessage: "An account with this username does not exists.",
+    });
+  }
+  const ok = await bcrypt.compare(password, user.password);
+  if (!ok) {
+    return res.status(400).render("users/login", {
+      pageTitle,
+      errorMessage: "Wrong password",
+    });
+  }
+  req.session.loggedIn = true;
+  req.session.user = user;
+  req.session.save(() => {
+    return res.redirect("/");
+  });
+};
+
+export const logout = async (req, res) => {
+  req.session.destroy(() => {
+    return res.redirect("/");
+  });
 };

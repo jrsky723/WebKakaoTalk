@@ -1,0 +1,19 @@
+mixin navigator(loggedInUser)
+    nav
+        ul
+            li
+                a(href="/") Home
+            if loggedIn
+                li
+                    a(href=`/users/${loggedInUser._id}`) My Profile
+                li
+                    a(href="/users/edit") Edit Profile
+                li
+                    a(href="/users/logout") Logout
+                li
+                    a(href="/chats/create") Create Room
+            else
+                li
+                    a(href="/users/login") Login
+                li
+                    a(href="/users/join") Join
