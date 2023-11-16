@@ -1,11 +1,17 @@
 import User from "../models/User";
 import { Op } from "sequelize";
 import bcrypt from "bcrypt";
+import { StatusCodes } from "http-status-codes";
 
-export const edit = (req, res) => res.send("Edit User");
-export const remove = (req, res) => res.send("Remove User");
-
-export const see = (req, res) => res.send("See User");
+export const see = async (req, res) => {
+  const { id } = req.params;
+  const pageTitle = "Profile";
+  const user = await User.findOne({ where: { id } });
+  if (!user) {
+    return res.status(StatusCodes.NOT_FOUND).render("404", { pageTitle });
+  }
+  return res.render("users/profile", { pageTitle, user });
+};
 
 export const getJoin = (req, res) => {
   return res.render("users/join", { pageTitle: "Join" });
@@ -15,7 +21,7 @@ export const postJoin = async (req, res) => {
   const pageTitle = "Join";
   // password === password2
   if (password !== password2) {
-    return res.status(400).render("users/join", {
+    return res.status(StatusCodes.BAD_REQUEST).render("users/join", {
       pageTitle,
       errorMessage: "Password confirmation does not match.",
     });
@@ -28,7 +34,7 @@ export const postJoin = async (req, res) => {
     raw: true,
   });
   if (exists) {
-    return res.status(400).render("users/join", {
+    return res.status(StatusCodes.BAD_REQUEST).render("users/join", {
       pageTitle,
       errorMessage: "This username/email is already taken.",
     });
@@ -43,7 +49,7 @@ export const postJoin = async (req, res) => {
     });
     return res.redirect("/");
   } catch (error) {
-    return res.status(400).render("users/join", {
+    return res.status(StatusCodes.BAD_REQUEST).render("users/join", {
       pageTitle,
       errorMessage: error.message,
     });
@@ -58,14 +64,14 @@ export const postLogin = async (req, res) => {
   const pageTitle = "Login";
   const user = await User.findOne({ where: { username } });
   if (!user) {
-    return res.status(400).render("users/login", {
+    return res.status(StatusCodes.BAD_REQUEST).render("users/login", {
       pageTitle,
       errorMessage: "An account with this username does not exists.",
     });
   }
   const ok = await bcrypt.compare(password, user.password);
   if (!ok) {
-    return res.status(400).render("users/login", {
+    return res.status(StatusCodes.BAD_REQUEST).render("users/login", {
       pageTitle,
       errorMessage: "Wrong password",
     });
@@ -82,3 +88,34 @@ export const logout = async (req, res) => {
     return res.redirect("/");
   });
 };
+
+export const getEdit = (req, res) => {
+  return res.render("users/edit", { pageTitle: "Edit Profile" });
+};
+export const postEdit = async (req, res) => {
+  const {
+    session: {
+      user: { id, avatarURL },
+    },
+    body: { name, email },
+    file,
+  } = req;
+  const pageTitle = "Edit Profile";
+  try {
+    const user = await User.findByPk(id);
+    await user.update({
+      name,
+      email,
+      avatarURL: file ? "/" + file.path : avatarURL,
+    });
+    req.session.user = user;
+    return res.redirect("/users/edit");
+  } catch (error) {
+    return res.render("users/edit", {
+      pageTitle,
+      errorMessage: error.message,
+    });
+  }
+};
+
+export const remove = (req, res) => res.send("Remove User");

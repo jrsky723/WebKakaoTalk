@@ -1,6 +1,5 @@
 import express from "express";
 import {
-  edit,
   getLogin,
   getJoin,
   logout,
@@ -8,15 +7,32 @@ import {
   see,
   postJoin,
   postLogin,
+  getEdit,
+  postEdit,
 } from "../controllers/userController";
+import {
+  avatarUpload,
+  protectorMiddleware,
+  publicOnlyMiddleware,
+} from "../middlewares";
 
 const userRouter = express.Router();
 
-userRouter.get("/logout", logout);
-userRouter.route("/edit").get(edit).post(edit);
+userRouter.get("/logout", protectorMiddleware, logout);
+userRouter
+  .route("/edit")
+  .all(protectorMiddleware)
+  .get(getEdit)
+  .post(avatarUpload.single("avatar"), postEdit);
+
 userRouter.get("/remove", remove);
-userRouter.route("/login").get(getLogin).post(postLogin);
-userRouter.route("/join").get(getJoin).post(postJoin);
+userRouter.route("/join").all(publicOnlyMiddleware).get(getJoin).post(postJoin);
+userRouter
+  .route("/login")
+  .all(publicOnlyMiddleware)
+  .get(getLogin)
+  .post(postLogin);
+
 userRouter.get("/:id(\\d+)", see);
 
 export default userRouter;
