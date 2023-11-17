@@ -9,7 +9,6 @@ import rootRouter from "./routers/rootRouter";
 import userRouter from "./routers/userRouter";
 import chatRouter from "./routers/chatRouter";
 import { localsMiddleware } from "./middlewares";
-import { on } from "events";
 
 const app = express();
 const logger = morgan("dev");
@@ -43,15 +42,24 @@ function onSocketClose() {
   console.log("Disconnected from the Browser ❌");
 }
 
-function onSocketMessage(message) {
-  console.log(message.toString("utf8"));
-}
+const sockets = [];
 
 wss.on("connection", (socket) => {
+  sockets.push(socket);
+  socket["nickname"] = "Anonnymous";
   console.log("Connected to Browser ✅");
   socket.on("close", () => onSocketClose());
-  socket.on("message", (message) => onSocketMessage(message));
-  socket.send("hello!!");
+  socket.on("message", (msg) => {
+    const message = JSON.parse(msg);
+    switch (message.type) {
+      case "new_message":
+        sockets.forEach((aSocket) =>
+          aSocket.send(`${socket.nickname}: ${message.payload}`)
+        );
+      case "nickname":
+        socket["nickname"] = message.payload;
+    }
+  });
 });
 
 export default server;
