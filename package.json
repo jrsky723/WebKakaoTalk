@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Cloning Kakao Talk in Web (실시간 채팅 구현)",
   "scripts": {
-    "dev": "nodemon --exec babel-node src/init.js"
+    "dev": "nodemon"
   },
   "repository": {
     "type": "git",
@@ -27,9 +27,11 @@
     "multer": "^1.4.5-lts.1",
     "mysql2": "^3.6.3",
     "pug": "^3.0.2",
-    "sequelize": "^6.34.0"
+    "sequelize": "^6.34.0",
+    "ws": "^8.14.2"
   },
   "devDependencies": {
+    "@babel/cli": "^7.23.0",
     "@babel/core": "^7.23.2",
     "@babel/node": "^7.22.19",
     "@babel/preset-env": "^7.23.2",

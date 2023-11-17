@@ -8,6 +8,5 @@ mixin chatRoom(room)
             if room.Users && room.Users.length > 0
                 each user in room.Users
                     li #{user.username}
-                    li #{user.email}
             else
                 li There is no user in this room
