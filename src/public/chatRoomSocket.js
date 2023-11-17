@@ -1,11 +1,12 @@
-
 window.onload = function() {
-    
     const socket = io();
     
     socket.on("init", (data)=>{
         console.log('init event');
         const chat = document.querySelector("ul");
+        while (chat.firstChild) {
+            chat.removeChild(chat.firstChild);
+        }
         for(let i = 0; i < data.length; i++){
             const li = document.createElement("li");
             let formattedDate = formatDate(new Date(data[i].createdAt));
@@ -29,7 +30,7 @@ window.onload = function() {
 
     sendButton.addEventListener("click", async ()=>{
         let content = await document.querySelector(".chatting-input");
-        let userId = await document.querySelector(".userID");
+        let userId = await document.querySelector(".userID"); // 로그인한 유저의 id를 받아옴
         let chatRoomId = 1; // 방 마다 room id가 다르게 설정
         if(content.value == '' || userId.value == ''){
             alert("내용을 입력해주세요.");

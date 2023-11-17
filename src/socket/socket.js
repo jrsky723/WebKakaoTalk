@@ -21,7 +21,6 @@ const updateClient = (io)=>{
         limit: 1
     }).then((result) => {
         if (result.length > 0) {
-            const lastLabel = result[0];
             console.log("마지막 레이블 조회 성공");
             io.emit("new item", result);
         } else {
@@ -43,7 +42,7 @@ const initChatRoom = (io)=>{
             console.log("전체 레이블 조회 성공");
             io.emit("init", result);
         } else {
-            console.log("레이블이 없습니다.");
+            console.log("초기화 할 레이블이 없습니다.");
         }
     }).catch((err) => {
         console.error(err);
@@ -64,5 +63,8 @@ module.exports = (io)=>{
         socket.on("disconnect", (data) =>{
             console.log("disconnect");
         })
+        socket.on('error', (error)=>{
+            console.log(error);
+        });
     })
 };
