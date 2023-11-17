@@ -2,6 +2,8 @@ import User from "../models/User";
 import { Op } from "sequelize";
 import bcrypt from "bcrypt";
 import { StatusCodes } from "http-status-codes";
+import imgbbUploader from "imgbb-uploader";
+import fs from "fs";
 
 export const see = async (req, res) => {
   const { id } = req.params;
@@ -41,13 +43,17 @@ export const postJoin = async (req, res) => {
   }
 
   try {
-    await User.create({
+    const user = await User.create({
       name,
       username,
       email,
       password,
     });
-    return res.redirect("/");
+    req.session.loggedIn = true;
+    req.session.user = user;
+    req.session.save(() => {
+      return res.redirect("/");
+    });
   } catch (error) {
     return res.status(StatusCodes.BAD_REQUEST).render("users/join", {
       pageTitle,
@@ -101,12 +107,25 @@ export const postEdit = async (req, res) => {
     file,
   } = req;
   const pageTitle = "Edit Profile";
+  let newAvatarURL = "/" + file.path;
+  if (file) {
+    try {
+      newAvatarURL = await ImgbbURL(file.path);
+      // delete original file in uploads folder
+      fs.unlinkSync(file.path);
+    } catch (error) {
+      return res.status(StatusCodes.BAD_REQUEST).render("users/edit", {
+        pageTitle,
+        errorMessage: error.message,
+      });
+    }
+  }
   try {
     const user = await User.findByPk(id);
     await user.update({
       name,
       email,
-      avatarURL: file ? "/" + file.path : avatarURL,
+      avatarURL: file ? newAvatarURL : avatarURL,
     });
     req.session.user = user;
     return res.redirect("/users/edit");
@@ -115,6 +134,19 @@ export const postEdit = async (req, res) => {
       pageTitle,
       errorMessage: error.message,
     });
+  }
+};
+
+const ImgbbURL = async (filePath) => {
+  try {
+    const options = {
+      apiKey: process.env.IMGBB_API_KEY,
+      imagePath: filePath,
+    };
+    const response = await imgbbUploader(options);
+    return response.display_url;
+  } catch (error) {
+    throw new Error(error.message);
   }
 };
 
