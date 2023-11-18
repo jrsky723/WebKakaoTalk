@@ -1,5 +1,6 @@
 import ChatRoom from "../models/ChatRoom";
 import User from "../models/User";
+import Message from "../models/Message";
 
 export const home = async (req, res) => {
   const pageTitle = "Chat Rooms";
@@ -21,12 +22,14 @@ export const home = async (req, res) => {
 export const see = async (req, res) => {
   const { id } = req.params;
   const chatRoom = await ChatRoom.findByPk(id);
+  const user = req.session.user;
   if (!chatRoom) {
     return res.render("404", { pageTitle: "Room not found." });
   } else {
     return res.render("chat-rooms/detail", {
       pageTitle: `${chatRoom.name}`,
       chatRoom,
+      user,
     });
   }
 };

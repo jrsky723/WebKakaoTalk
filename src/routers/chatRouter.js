@@ -5,6 +5,7 @@ import {
   postEdit,
   getCreate,
   postCreate,
+  getTest,
 } from "../controllers/chatRoomController";
 
 const chatRouter = express.Router();
