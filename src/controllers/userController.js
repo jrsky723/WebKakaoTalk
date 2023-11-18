@@ -107,7 +107,7 @@ export const postEdit = async (req, res) => {
     file,
   } = req;
   const pageTitle = "Edit Profile";
-  let newAvatarURL = "/" + file.path;
+  let newAvatarURL = null;
   if (file) {
     try {
       newAvatarURL = await ImgbbURL(file.path);
@@ -125,7 +125,7 @@ export const postEdit = async (req, res) => {
     await user.update({
       name,
       email,
-      avatarURL: file ? newAvatarURL : avatarURL,
+      avatarURL: newAvatarURL || avatarURL,
     });
     req.session.user = user;
     return res.redirect("/users/edit");
