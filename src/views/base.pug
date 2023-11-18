@@ -1,13 +1,14 @@
 doctype html
 html(lang="ko")
     head
+        meta(charset="utf-8")
         title #{pageTitle} | Web Kakao Talk
         link(rel="stylesheet", href="https://unpkg.com/mvp.css")
     body
         header
             h1=pageTitle
+            a(href="/") Home
     main
         if errorMessage
             span=errorMessage
         block content
-        

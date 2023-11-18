@@ -63,10 +63,7 @@ export const postCreate = async (req, res) => {
       name: name,
       max: 10,
     });
-
-    //test user
-    const userId = 1;
-    const user = await User.findByPk(userId);
+    const user = await User.findByPk(req.session.user.id);
     await chatRoom.addUser(user);
 
     return res.redirect("/");
