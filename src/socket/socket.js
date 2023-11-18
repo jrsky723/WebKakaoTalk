@@ -1,4 +1,5 @@
 import messageTable from "../models/Message";
+import User from "../models/User";
 
 const saveMessage = async (data) => {
     try {
@@ -14,14 +15,18 @@ const saveMessage = async (data) => {
     }
 };
 
-const updateClient = (io)=>{
+const updateClient = (io, data)=>{
      messageTable.findAll({
-        where: { chatRoomId: 1 }, // 방이 있을 시 그 방의 ID로 설정
+        where: { chatRoomId: data.chatRoomId }, 
         order: [["createdAt", "DESC"]],
-        limit: 1
+        limit: 1,
+        include: [{
+            model: User,
+            as: 'User'
+        }],
     }).then((result) => {
         if (result.length > 0) {
-            console.log("마지막 레이블 조회 성공");
+            console.log("마지막 레이블 조회 성공");;
             io.emit("new item", result);
         } else {
             console.log("레이블이 없습니다.");
@@ -33,10 +38,14 @@ const updateClient = (io)=>{
     });
 }
 
-const initChatRoom = (io)=>{
+const initChatRoom = (io, data)=>{
     messageTable.findAll({
         order: [["createdAt", "ASC"]],
-        where: { chatRoomId: 1 }, // 방이 있을 시 그 방의 ID로 설정
+        where: { chatRoomId: data.chatRoomId }, 
+        include: [{
+            model: User,
+            as: 'User'
+        }]
     }).then((result) => {
         if (result.length > 0) {
             console.log("전체 레이블 조회 성공");
@@ -52,12 +61,15 @@ const initChatRoom = (io)=>{
 
 module.exports = (io)=>{
     io.on("connection", (socket)=>{
-        initChatRoom(io);
+        
+        socket.on('join', function(data) {
+            initChatRoom(io, data);
+        });
 
         socket.on("chatting", async (data)=>{
             console.log('chatting event');
             await saveMessage(data);
-            updateClient(io);
+            updateClient(io, data);
         });
 
         socket.on("disconnect", (data) =>{

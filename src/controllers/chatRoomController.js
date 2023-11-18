@@ -22,12 +22,14 @@ export const home = async (req, res) => {
 export const see = async (req, res) => {
   const { id } = req.params;
   const chatRoom = await ChatRoom.findByPk(id);
+  const user = req.session.user;
   if (!chatRoom) {
     return res.render("404", { pageTitle: "Room not found." });
   } else {
     return res.render("chat-rooms/detail", {
       pageTitle: `${chatRoom.name}`,
       chatRoom,
+      user,
     });
   }
 };
@@ -80,19 +82,4 @@ export const remove = async (req, res) => {
   const chatRoom = await ChatRoom.findByPk(id);
   await chatRoom.destroy();
   return res.redirect("/");
-};
-
-export const getTest = async (req, res) => {
-  try {
-    let chats = await Message.findAll({
-      where: { chatRoomId: 1 },
-    });
-    return res.render("test", {
-      chats,
-    });
-  } catch (error) {
-    return res.render("test", {
-      errorMessage: error.message,
-    });
-  }
 };
