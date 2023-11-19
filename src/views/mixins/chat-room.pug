@@ -1,13 +1,9 @@
-mixin chatRoom(room)
-    div
-        h4
-            a(href=`/chats/${room.id}`)= room.name
-        ul  
-            li #{room.name}
-            li #{room.max}    
-            if room.Users && room.Users.length > 0
-                each user in room.Users
-                    li #{user.username}
-                    li #{user.email}
-            else
-                li There is no user in this room
+include avatar-list
+
+mixin chatRoom(room, avatars)
+    div.list-room
+        a(href=`/chats/${room.id}`)= room.name
+        +avatarList(room.Users)   
+        if room.Users && room.Users.length > 0
+        else
+            span There is no user in this room

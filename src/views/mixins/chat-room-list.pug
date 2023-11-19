@@ -1,8 +1,8 @@
-include ../mixins/chat-room
+include chat-room
+include avatar-list
 
 mixin chatRoomList(chatRooms)
-    ul
         each room in chatRooms
-            +chatRoom(room)
+            +chatRoom(room, avatars)  
         else
-            li There is no room yet
+            span There is no room yet

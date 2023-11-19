@@ -1,0 +1,6 @@
+
+mixin avatarList(users)
+    article.center
+        .c-profile__list
+            each user in users
+                  a.c-profile(href=`/users/${user.id}` username=user.name style="background-image: url(" + user.avatarURL + ");")

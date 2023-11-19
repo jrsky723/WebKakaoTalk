@@ -13,7 +13,7 @@ const ChatRoom = sequelize.define(
       type: DataTypes.TEXT,
       allowNull: false,
     },
-    max: {
+    hostId: {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
