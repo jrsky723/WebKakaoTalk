@@ -1,16 +1,15 @@
 import express from "express";
 import {
   see,
-  getEdit,
-  postEdit,
   getCreate,
   postCreate,
+  deleteChatRoom,
 } from "../controllers/chatRoomController";
 
 const chatRouter = express.Router();
 
 chatRouter.get("/:id(\\d+)", see);
-chatRouter.route("/:id(\\d+)/edit").get(getEdit).post(postEdit);
+chatRouter.get("/:id(\\d+)/delete", deleteChatRoom);
 chatRouter.route("/create").get(getCreate).post(postCreate);
 
 export default chatRouter;

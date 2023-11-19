@@ -1,7 +1,7 @@
 window.onload = function () {
   const socket = io();
   const chat = document.querySelector(".chat");
-  const homeLink = document.querySelector(".home-link");
+  const homeLink = document.querySelector(".homeLink");
 
   const handleHomeLinkClick = (event) => {
     event.preventDefault();
@@ -73,6 +73,20 @@ window.onload = function () {
       msgDiv.classList.add("rcvd");
     }
     msgDiv.setAttribute("data-name-time", dataNameTime);
+    msgDiv.setAttribute("data-name", user.name);
+    // if previous message is from the same user, hide the avatar
+    // and if not, show the avatar, and margin-top: 15px
+    const lastMessage = chat.lastElementChild;
+    if (lastMessage) {
+      const lastMessageDataName = lastMessage.dataset.name;
+      if (lastMessageDataName === user.name) {
+        avatarDiv.style.visibility = "hidden";
+        msgDiv.style.marginTop = "0px";
+      } else {
+        avatarDiv.style.visibility = "visible";
+        msgDiv.style.marginTop = "15px";
+      }
+    }
     chat.appendChild(msgDiv);
     chat.scrollTop = chat.scrollHeight;
   };
