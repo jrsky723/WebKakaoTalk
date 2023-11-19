@@ -1,3 +1,8 @@
+// Socket IO
+import http from "http";
+import socketIO from "socket.io";
+import socketController from "./socket/socket";
+// express
 import express from "express";
 import morgan from "morgan";
 import session from "express-session";
@@ -6,9 +11,6 @@ import sequelize from "./db";
 import rootRouter from "./routers/rootRouter";
 import userRouter from "./routers/userRouter";
 import chatRouter from "./routers/chatRouter";
-import http from "http";
-import socketIO from "socket.io";
-import socketController from './socket/socket';
 import { localsMiddleware } from "./middlewares";
 
 const app = express();
@@ -17,13 +19,14 @@ const logger = morgan("dev");
 const server = http.createServer(app);
 const io = socketIO(server);
 
-app.use(express.static(__dirname + '/public'));
+app.use(express.static(__dirname + "/public"));
 socketController(io);
 
 app.set("view engine", "pug");
 app.set("views", process.cwd() + "/src/views");
 app.use(logger);
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 
 const SequelizeStore = ConnectSessionSequelize(session.Store);
 app.use(

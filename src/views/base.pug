@@ -4,11 +4,13 @@ html(lang="ko")
         meta(charset="utf-8")
         title #{pageTitle} | Web Kakao Talk
         link(rel="stylesheet", href="https://unpkg.com/mvp.css")
+        link(rel='stylesheet', href='/css/style.css')
     body
         header
             h1=pageTitle
             a(href="/") Home
-    main
-        if errorMessage
-            span=errorMessage
-        block content
+        main
+            if errorMessage
+                span=errorMessage
+            block content
+        block scripts

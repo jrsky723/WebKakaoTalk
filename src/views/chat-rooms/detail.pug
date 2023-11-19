@@ -1,15 +1,13 @@
 extends ../base
 
 block content
-    head 
-        script(src='/socket.io/socket.io.js')  
-        script(src='/chatRoomSocket.js')
-        script.
-            var chatRoom = !{JSON.stringify(chatRoom)};
-            var user = !{JSON.stringify(user)};
-    h1 Chat Room
-    body
-        ul.chatting-list(style='list-style-type: none;')
-
+    div.chat
+    div.input
         input.chatting-input(type='text')
-        button.send-button 전송
+        button.send-button Send
+block scripts
+    script(src='/socket.io/socket.io.js')  
+    script(src='/js/chatRoomSocket.js')
+    script.
+        var chatRoom = !{JSON.stringify(chatRoom)};
+        var user = !{JSON.stringify(loggedInUser)};

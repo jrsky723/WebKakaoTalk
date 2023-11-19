@@ -1,6 +1,5 @@
 import ChatRoom from "../models/ChatRoom";
 import User from "../models/User";
-import Message from "../models/Message";
 
 export const home = async (req, res) => {
   const pageTitle = "Chat Rooms";
@@ -29,7 +28,6 @@ export const see = async (req, res) => {
     return res.render("chat-rooms/detail", {
       pageTitle: `${chatRoom.name}`,
       chatRoom,
-      user,
     });
   }
 };
