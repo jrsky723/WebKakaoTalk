@@ -1,7 +1,6 @@
 window.onload = function () {
   const socket = io();
 
-  const sendButton = document.querySelector(".send-button");
   const chat = document.querySelector(".chat");
 
   // util functions
@@ -57,19 +56,23 @@ window.onload = function () {
     chat.appendChild(msgDiv);
   };
 
-  // event functions
-  sendButton.addEventListener("click", () => {
+  if (loggedIn) {
+    console.log("user exist");
+    const sendButton = document.querySelector(".send-button");
     let content = document.querySelector(".chatting-input");
-    let userId = user.id;
-    let chatRoomId = chatRoom.id; // 방 마다 room id가 다르게 설정
-    if (content.value == "") {
-      alert("내용을 입력해주세요.");
-    } else if (content.value.length > 100) {
-      alert("100자 이내로 입력해주세요.");
-    } else {
-      inputMessage(content, userId, chatRoomId);
-    }
-  });
+    // event functions
+    sendButton.addEventListener("click", () => {
+      let userId = user.id;
+      let chatRoomId = chatRoom.id; // 방 마다 room id가 다르게 설정
+      if (content.value == "") {
+        alert("내용을 입력해주세요.");
+      } else if (content.value.length > 100) {
+        alert("100자 이내로 입력해주세요.");
+      } else {
+        inputMessage(content, userId, chatRoomId);
+      }
+    });
+  }
 
   // socket event functions
   socket.on("init", (data) => {
@@ -93,7 +96,7 @@ window.onload = function () {
     }
   });
 
-  socket.on("connect", function () {
+  socket.on("connect", () => {
     // 서버에 접속하면 발생하는 이벤트
     socket.emit("join", { chatRoomId: chatRoom.id });
   });

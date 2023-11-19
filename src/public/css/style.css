@@ -4,15 +4,28 @@
   box-sizing: border-box;
 }
 
+/*ul is in navigator. i want to make li center */
+
+.center {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  list-style: none;
+  overflow: hidden;
+}
+
 .chat {
   --rad: 20px;
   --rad-sm: 3px;
   font: 16px/1.5 sans-serif;
   display: flex;
   flex-direction: column;
-  padding: 20px;
+  padding: 0px 50px 0px 50px;
   max-width: 500px;
   margin: auto;
+  overflow-y: auto;
+  max-height: 50vh;
 }
 
 .input {
