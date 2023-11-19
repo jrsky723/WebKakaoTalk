@@ -1,4 +1,4 @@
-.c-profile {
+.user-avatar {
   width: 70px;
   height: 70px;
   border: 4px solid white;
@@ -11,14 +11,14 @@
   transition: all 200ms ease;
 }
 
-.c-profile:nth-of-type(n + 2) {
+.user-avatar:nth-of-type(n + 2) {
   margin-left: -42px;
 }
-.c-profile:hover {
+.user-avatar:hover {
   transform: scale(1.2);
   box-shadow: 0px 8px 20px rgba(44, 44, 84, 0.2);
 }
-.c-profile:hover:after {
+.user-avatar:hover:after {
   position: absolute;
   content: attr(username);
   background: rgba(255, 255, 255, 0.95);
@@ -34,7 +34,7 @@
   animation: fadein 100ms ease 750ms forwards;
 }
 
-.c-profile__list {
+.user-avatar__list {
   display: inline-flex;
   position: relative;
   width: auto;
@@ -42,11 +42,11 @@
   padding-bottom: 1rem;
 }
 
-.c-profile__list:hover .c-profile:nth-of-type(n + 2) {
+.user-avatar__list:hover .user-avatar:nth-of-type(n + 2) {
   margin-left: 7px;
 }
 
-article {
+.avatar-box {
   width: 100%;
   max-width: 600px;
 }

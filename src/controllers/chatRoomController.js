@@ -2,14 +2,11 @@ import ChatRoom from "../models/ChatRoom";
 import User from "../models/User";
 
 export const home = async (req, res) => {
-  const pageTitle = "Chat Rooms";
+  const pageTitle = "Web Chat";
   const chatRooms = await ChatRoom.findAll({
     include: {
       model: User,
-      attributes: { exclude: ["password"] },
-      through: {
-        attributes: [],
-      },
+      attributes: ["id", "name", "avatarURL"],
     },
   });
   return res.render("home", {
@@ -21,7 +18,6 @@ export const home = async (req, res) => {
 export const see = async (req, res) => {
   const { id } = req.params;
   const chatRoom = await ChatRoom.findByPk(id);
-  const user = req.session.user;
   if (!chatRoom) {
     return res.render("404", { pageTitle: "Room not found." });
   } else {
@@ -41,16 +37,6 @@ export const getEdit = async (req, res) => {
   });
 };
 
-export const postEdit = async (req, res) => {
-  const { id } = req.params;
-  const { name, max } = req.body;
-  const chatRoom = await ChatRoom.findByPk(id);
-  chatRoom.name = name;
-  chatRoom.max = max;
-  await chatRoom.save();
-  return res.redirect(`/chats/${id}`);
-};
-
 export const getCreate = (req, res) => {
   return res.render("chat-rooms/create", { pageTitle: "Create Room" });
 };
@@ -59,13 +45,11 @@ export const postCreate = async (req, res) => {
   const { name } = req.body;
   const pageTitle = "Create Room";
   try {
-    const chatRoom = await ChatRoom.create({
-      name: name,
-      max: 10,
-    });
     const user = await User.findByPk(req.session.user.id);
-    await chatRoom.addUser(user);
-
+    await ChatRoom.create({
+      name: name,
+      hostId: user.id,
+    });
     return res.redirect("/");
   } catch (error) {
     return res.render("chat-rooms/create", {
@@ -75,7 +59,7 @@ export const postCreate = async (req, res) => {
   }
 };
 
-export const remove = async (req, res) => {
+export const deleteChatRoom = async (req, res) => {
   const { id } = req.params;
   const chatRoom = await ChatRoom.findByPk(id);
   await chatRoom.destroy();

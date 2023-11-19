@@ -4,11 +4,15 @@
   font: 16px/1.5 sans-serif;
   display: flex;
   flex-direction: column;
-  padding: 0px 50px 0px 50px;
+  padding: 20px 40px 10px 40px;
   max-width: 500px;
   margin: auto;
   overflow-y: auto;
   max-height: 50vh;
+  min-height: 50vh;
+  border: 1px solid #ddd;
+  border-radius: var(--rad-sm);
+  top: 0%;
 }
 
 #chat-form {
@@ -117,7 +121,7 @@
   margin: auto;
   /* gradient background plese
     background: #42a5f5;*/
-  background: linear-gradient(90deg, #42a5f5, #2671ff);
+  background: var(--blue-gradient);
 
   color: #fff;
   border-radius: var(--rad);

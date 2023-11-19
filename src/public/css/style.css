@@ -3,7 +3,7 @@
 
 @import "avatars.css";
 @import "chatRoom.css";
-@import "roomList.css";
+@import "roomCard.css";
 
 /* QuickReset */
 * {
@@ -18,4 +18,14 @@
   align-items: center;
   list-style: none;
   overflow: hidden;
+}
+
+.homeLink {
+  position: absolute;
+  /* Assuming you want to center it horizontally */
+  left: 50%;
+
+  /* Assuming you want to center it vertically as well */
+  /* Replace 50px with the amount you want to move to the left */
+  transform: translate(-50%) translateX(-170px) translateY(-50%);
 }
