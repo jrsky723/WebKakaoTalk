@@ -1,79 +1,112 @@
 import Message from "../models/Message";
 import User from "../models/User";
 
-const saveMessage = async (data) => {
+const saveMessage = async (message) => {
   try {
-    await Message.create({
-      content: data.content,
-      userId: data.userId,
-      chatRoomId: data.chatRoomId,
+    const { userId, chatRoomId, content } = message;
+    const newMessage = await Message.create({
+      userId,
+      chatRoomId,
+      content,
     });
-    console.log(
-      `userID ${data.userId}가 ${data.chatRoomId}번 방에 메시지를 보냈습니다.`
-    );
+    console.log(`New message : ${newMessage.userId} : ${newMessage.content}`);
   } catch (err) {
     console.error(err);
-    console.log("Message 저장 실패");
+    console.log("Message save failed");
   }
 };
 
-const updateClient = async (io, data) => {
+const getMessages = async (roomId) => {
   try {
-    const result = await Message.findAll({
-      where: { chatRoomId: data.chatRoomId },
-      order: [["createdAt", "DESC"]],
-      limit: 1,
-      include: [
-        {
-          model: User,
-          as: "User",
-        },
-      ],
-    });
-    io.emit("new item", result);
-  } catch (err) {
-    console.error(err);
-  }
-};
-
-const initChatRoom = async (io, data) => {
-  try {
-    const result = await Message.findAll({
+    const messages = await Message.findAll({
       order: [["createdAt", "ASC"]],
-      where: { chatRoomId: data.chatRoomId },
+      where: { chatRoomId: roomId },
       include: [
         {
           model: User,
           as: "User",
+          attributes: ["name", "avatarURL"],
         },
       ],
     });
-    io.emit("init", result);
+    return messages;
   } catch (err) {
     console.error(err);
   }
 };
 
-function socketController(io) {
+const addUserToRoom = async (userId, roomId) => {
+  try {
+    const user = await User.findByPk(userId);
+    await user.addChatRoom(roomId);
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+const removeUserFromRoom = async (userId, roomId) => {
+  try {
+    const user = await User.findByPk(userId);
+    await user.removeChatRoom(roomId);
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+const socketController = (io) => {
   io.on("connection", (socket) => {
-    console.log("connect");
-    socket.on("join", function (data) {
-      initChatRoom(io, data);
+    const annonymous = { id: null, name: "Anonnymous" };
+    socket["user"] = annonymous;
+
+    const userRoom = new Set();
+
+    const leaveRoom = async (socket, roomId) => {
+      socket.to(roomId).emit("bye", socket.user.name);
+      if (userRoom.has(roomId)) {
+        await removeUserFromRoom(socket.user.id, roomId);
+        userRoom.delete(roomId);
+      }
+    };
+
+    socket.onAny((event) => {
+      console.log(`Socket Event: ${event}`);
+    });
+    socket.on("enter_room", async (chatRoomId, done) => {
+      socket.join(chatRoomId);
+      if (socket.user.id) {
+        userRoom.add(chatRoomId);
+        await addUserToRoom(socket.user.id, chatRoomId);
+      }
+      const messages = await getMessages(chatRoomId);
+      socket.emit("get_messages", messages);
+      done();
+      socket.to(chatRoomId).emit("welcome", socket.user.name);
     });
 
-    socket.on("chatting", async (data) => {
-      console.log("chatting event");
-      await saveMessage(data);
-      updateClient(io, data);
+    socket.on("leave_room", async (chatRoomId, done) => {
+      socket.leave(chatRoomId);
+      await leaveRoom(socket, chatRoomId);
+      done();
     });
 
-    socket.on("disconnect", (data) => {
+    socket.on("disconnecting", () => {
+      socket.rooms.forEach(async (room) => {
+        leaveRoom(socket, room);
+      });
+    });
+
+    socket.on("new_message", async (message) => {
+      socket.to(message.chatRoomId).emit("new_message", message);
+      await saveMessage(message);
+    });
+    socket.on("set_user", (user) => (socket["user"] = user));
+    socket.on("disconnect", () => {
       console.log("disconnect");
     });
     socket.on("error", (error) => {
       console.log(error);
     });
   });
-}
+};
 
 export default socketController;

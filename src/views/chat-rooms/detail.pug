@@ -2,14 +2,14 @@ extends ../base
 
 block content
     div.chat
-    div.input
-        if loggedIn
-            input.chatting-input(type='text')
-            button.send-button Send
+    if loggedIn
+        form#chat-form
+            input(placeholder="message", required, type="text")
+            input(type="submit", value="Send")
 block scripts
     script(src='/socket.io/socket.io.js')  
     script(src='/js/chatRoomSocket.js')
     script.
-        var chatRoom = !{JSON.stringify(chatRoom)};
-        var user = !{JSON.stringify(loggedInUser)};
-        var loggedIn = !{JSON.stringify(loggedIn)};
+        const chatRoom = !{JSON.stringify(chatRoom)};
+        const loggedInUser = !{JSON.stringify(loggedInUser)};
+        const loggedIn = !{JSON.stringify(loggedIn)};

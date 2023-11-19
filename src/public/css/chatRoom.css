@@ -1,0 +1,126 @@
+.chat {
+  --rad: 20px;
+  --rad-sm: 3px;
+  font: 16px/1.5 sans-serif;
+  display: flex;
+  flex-direction: column;
+  padding: 0px 50px 0px 50px;
+  max-width: 500px;
+  margin: auto;
+  overflow-y: auto;
+  max-height: 50vh;
+}
+
+#chat-form {
+  --rad: 20px;
+  --rad-sm: 3px;
+  font: 16px/1.5 sans-serif;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  max-width: 500px;
+  margin: auto;
+}
+
+.msg {
+  margin: 0px 10px 2px 10px;
+  position: relative;
+  max-width: 75%;
+  padding: 7px 15px;
+}
+
+.msg.sent {
+  border-radius: var(--rad) var(--rad-sm) var(--rad-sm) var(--rad);
+  background: #42a5f5;
+  color: #fff;
+  /* moves it to the right */
+  margin-left: auto;
+}
+
+.msg.rcvd {
+  border-radius: var(--rad-sm) var(--rad) var(--rad) var(--rad-sm);
+  background: #f1f1f1;
+  color: #555;
+  /* moves it to the left */
+  margin-right: auto;
+}
+
+.avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 10%;
+  position: absolute;
+}
+
+.msg.sent .avatar {
+  right: -40px;
+}
+
+.msg.rcvd .avatar {
+  left: -40px;
+}
+
+/* Improve radius for messages group */
+
+.msg.sent:first-child,
+.msg.rcvd + .msg.sent {
+  border-top-right-radius: var(--rad);
+}
+
+.msg.rcvd:first-child,
+.msg.sent + .msg.rcvd {
+  border-top-left-radius: var(--rad);
+}
+
+/* name-time */
+
+.msg::before {
+  content: attr(data-name-time);
+  font-size: 0.8rem;
+  position: absolute;
+  bottom: 100%;
+  color: #000;
+  white-space: nowrap;
+  /* Hidden by default */
+  display: none;
+}
+
+.msg.sent::before {
+  right: 15px;
+}
+
+.msg.rcvd::before {
+  left: 15px;
+}
+
+/* Show name-time only for first message in group */
+
+.msg:first-child::before,
+.msg.sent + .msg.rcvd::before,
+.msg.rcvd + .msg.sent::before {
+  display: block;
+}
+
+.toast {
+  --rad: 20px;
+  --rad-sm: 3px;
+  position: fixed;
+  top: 15vh;
+  left: 50%;
+  transform: translateX(-50%);
+  font: 18px/1.5 sans-serif;
+  display: flex;
+  flex-direction: column;
+  padding: 10px 20px;
+  width: 40vh;
+  text-align: center;
+  margin: auto;
+  /* gradient background plese
+    background: #42a5f5;*/
+  background: linear-gradient(90deg, #42a5f5, #2671ff);
+
+  color: #fff;
+  border-radius: var(--rad);
+  margin-top: 10px;
+  animation: fadein 0.5s, fadeout 0.5s 2s;
+}

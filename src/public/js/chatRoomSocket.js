@@ -1,35 +1,53 @@
 window.onload = function () {
   const socket = io();
-
   const chat = document.querySelector(".chat");
+  const homeLink = document.querySelector(".home-link");
 
-  // util functions
-  const inputMessage = (content, userId, chatRoomId) => {
-    let param = {
-      content: content.value,
-      userId: userId,
-      chatRoomId: chatRoomId,
-    };
-    socket.emit("chatting", param);
-    content.value = "";
-    param.userId.value = "";
+  const handleHomeLinkClick = (event) => {
+    event.preventDefault();
+    socket.emit("leave_room", chatRoom.id, () => {
+      window.location.href = "/";
+    });
   };
+
+  homeLink.addEventListener("click", handleHomeLinkClick);
+
+  function toast(message) {
+    const toast = document.createElement("div");
+    toast.classList.add("toast");
+    toast.innerText = message;
+    document.body.appendChild(toast);
+    toast.addEventListener("animationend", (event) => {
+      if (event.animationName === "fadeout") {
+        document.body.removeChild(toast);
+      }
+    });
+    toast.addEventListener("click", () => {
+      document.body.removeChild(toast);
+    });
+  }
 
   const formatDate = (date) => {
     let month = date.getMonth() + 1; // 월 (0부터 시작하므로 1을 더해줍니다)
     let day = date.getDate(); // 일
     let hours = date.getHours(); // 시
     let minutes = date.getMinutes(); // 분
+    let year = date.getFullYear(); // 년
 
     month = month < 10 ? "0" + month : month;
     day = day < 10 ? "0" + day : day;
     hours = hours < 10 ? "0" + hours : hours;
     minutes = minutes < 10 ? "0" + minutes : minutes;
 
-    return `${month}/${day} ${hours}:${minutes}`;
+    return `${year}-${month}-${day} | ${hours}:${minutes}`;
   };
 
-  const addMessageList = (data) => {
+  // util functions
+
+  const addMessage = (message) => {
+    const user = message.User;
+    const content = message.content;
+
     const msgDiv = document.createElement("div");
     msgDiv.classList.add("msg");
 
@@ -37,67 +55,80 @@ window.onload = function () {
     avatarDiv.classList.add("avatar");
 
     const img = document.createElement("img");
-    img.src = data.User.avatarURL;
-    img.alt = `${data.User.name}'s avatar`;
+    img.src = user.avatarURL;
+    img.alt = `${user.name}'s avatar`;
+    img.setAttribute("width", "100%");
+    img.setAttribute("height", "100%");
     avatarDiv.appendChild(img);
     msgDiv.appendChild(avatarDiv);
-    msgDiv.appendChild(document.createTextNode(`${data.content}`));
+    msgDiv.appendChild(document.createTextNode(`${content}`));
 
-    const formatedDate = formatDate(new Date(data.createdAt));
+    const formatedDate = formatDate(new Date(message.createdAt));
     let dataNameTime = "";
-    if (data.User.id === user.id) {
-      dataNameTime = `${formatedDate} ${data.User.name}`;
+    if (message.userId === loggedInUser.id) {
+      dataNameTime = `(${formatedDate}) ${user.name}`;
       msgDiv.classList.add("sent");
     } else {
-      dataNameTime = `${data.User.name} ${formatedDate}`;
+      dataNameTime = `${user.name} (${formatedDate})`;
       msgDiv.classList.add("rcvd");
     }
     msgDiv.setAttribute("data-name-time", dataNameTime);
     chat.appendChild(msgDiv);
+    chat.scrollTop = chat.scrollHeight;
   };
 
   if (loggedIn) {
-    console.log("user exist");
-    const sendButton = document.querySelector(".send-button");
-    let content = document.querySelector(".chatting-input");
-    // event functions
-    sendButton.addEventListener("click", () => {
-      let userId = user.id;
-      let chatRoomId = chatRoom.id; // 방 마다 room id가 다르게 설정
-      if (content.value == "") {
-        alert("내용을 입력해주세요.");
-      } else if (content.value.length > 100) {
-        alert("100자 이내로 입력해주세요.");
-      } else {
-        inputMessage(content, userId, chatRoomId);
-      }
-    });
+    const chatForm = document.querySelector("#chat-form");
+    chatForm.addEventListener("submit", handleMessageSubmit);
   }
 
-  // socket event functions
-  socket.on("init", (data) => {
-    if (data[0].chatRoomId != chatRoom.id) return;
-    else {
-      console.log("init event");
-      while (chat.firstChild) {
-        // 기존 채팅 내용 삭제
-        chat.removeChild(chat.firstChild);
-      }
-      for (let i = 0; i < data.length; i++) {
-        addMessageList(data[i]);
-      }
+  function handleMessageSubmit(event) {
+    event.preventDefault();
+    const input = document.querySelector("#chat-form input");
+    if (input.value.length > 100) {
+      alert("100자 이내로 입력해주세요.");
+      return;
     }
+    const data = {
+      chatRoomId: chatRoom.id,
+      userId: loggedInUser.id,
+      content: input.value,
+      User: {
+        name: loggedInUser.name,
+        avatarURL: loggedInUser.avatarURL,
+      },
+      createdAt: new Date(),
+    };
+    socket.emit("new_message", data);
+    addMessage(data);
+    input.value = "";
+  }
+
+  socket.on("new_message", (message) => {
+    addMessage(message);
   });
 
-  socket.on("new item", (data) => {
-    if (data[0].chatRoomId != chatRoom.id) return;
-    else {
-      addMessageList(data[0]);
-    }
+  socket.onAny((event) => {
+    console.log(`Socket Event: ${event}`);
+  });
+
+  // socket event functions
+  socket.on("get_messages", (messages) => {
+    messages.forEach((message) => addMessage(message));
   });
 
   socket.on("connect", () => {
-    // 서버에 접속하면 발생하는 이벤트
-    socket.emit("join", { chatRoomId: chatRoom.id });
+    socket.emit("set_user", { id: loggedInUser.id, name: loggedInUser.name });
+    socket.emit("enter_room", chatRoom.id, () => {
+      toast("Welcome!");
+    });
+  });
+
+  socket.on("welcome", (name) => {
+    toast(`${name} arrived!`);
+  });
+
+  socket.on("bye", (name) => {
+    toast(`${name} left...`);
   });
 };
