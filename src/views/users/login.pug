@@ -1,11 +1,12 @@
 extends ../base
 
 block content
-    form(method="POST")
-        input(placeholder="Username", name="username", type="text", required)
-        input(placeholder="Password", name="password", type="password", required)
-        input(type="submit", value="Login")
-        br
+    div.center
+        form(method="POST")
+            input(placeholder="Username", name="username", type="text", required)
+            input(placeholder="Password", name="password", type="password", required)
+            input(type="submit", value="Login")
+            br
     hr
     div
         span Don't have an account? 

@@ -2,8 +2,9 @@ extends ../base
 
 block content
     div.center 
-        h2 Edit Profile
-        img(src=loggedInUser.avatarURL, alt=loggedInUser.name, width="200", height="200")
+        img(src=loggedInUser.avatarURL, alt=loggedInUser.name, width="200vh", height="200vh")
+        br
+        br
         form(method="POST", enctype="multipart/form-data")
             label(for="name") Name:
             input#name(type="text", name="name", value=loggedInUser.name)

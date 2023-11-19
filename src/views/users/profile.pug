@@ -1,17 +1,18 @@
 extends ../base
 
 block content
-    h2.profile-title= `${user.name}'s Profile`
-    section
-        aside
-            img.profile-image(src= user.avatarURL, alt= user.name, width="200", height="200")
-        aside
-            label Profile Email:
-            span.profile-email= user.email
-        aside
-            label Account Created:
-            span.profile-created= user.createdAt
-        aside
-            label Last Updated:
-            span.profile-updated= user.updatedAt
-    a(href="edit") Edit Profile
+    div.center
+        h2.profile-title= `${user.name}'s Profile`
+        section
+            aside
+                img.profile-image(src= user.avatarURL, alt= user.name, width="200", height="200")
+            aside
+                label Profile Email:
+                span.profile-email= user.email
+            aside
+                label Account Created:
+                span.profile-created= user.createdAt
+            aside
+                label Last Updated:
+                span.profile-updated= user.updatedAt
+        a(href="edit") Edit Profile
