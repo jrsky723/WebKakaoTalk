@@ -4,11 +4,11 @@ mixin chatRoom(room, avatars)
     div.room-card
         div.room-card__header
             div.room-host
-                span.room-name= room.name
-                span.host-name= "(by " + room.host.name + ")"
+                span.room-name= `${room.name.length > 5 ? room.name.substring(0, 6) + "..." : room.name}`
+                span.host-name= `(by ${room.host.name.length > 5 ? room.host.name.substring(0, 6) + "..." : room.host.name})`
             span.usersCount= room.Users.length + " users"
         +avatarList(room.Users)
         div.button-container
             button.join-room(type="button" data-room-id=room.id) Join
-            if loggedInUser.id == room.host.id
+            if loggedInUser.id == room.host.id || loggedInUser.admin
                 button.delete-room(type="button" data-room-id=room.id) Delete
