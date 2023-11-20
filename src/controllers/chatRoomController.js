@@ -24,7 +24,15 @@ export const home = async (req, res) => {
 
 export const see = async (req, res) => {
   const { id } = req.params;
-  const chatRoom = await ChatRoom.findByPk(id);
+  const chatRoom = await ChatRoom.findByPk(id, {
+    include: [
+      {
+        model: User,
+        as: "host",
+        attributes: ["id", "name", "avatarURL"],
+      },
+    ],
+  });
   if (!chatRoom) {
     return res.render("404", { pageTitle: "Room not found." });
   } else {
@@ -68,7 +76,15 @@ export const postCreate = async (req, res) => {
 
 export const deleteChatRoom = async (req, res) => {
   const { id } = req.params;
-  const chatRoom = await ChatRoom.findByPk(id);
-  await chatRoom.destroy();
-  return res.redirect("/");
+  const { user } = req.session;
+  try {
+    const chatRoom = await ChatRoom.findByPk(id);
+    if (user.admin === false && chatRoom.hostId !== user.id) {
+      return res.status(403).redirect("/");
+    }
+    await chatRoom.destroy();
+    return res.redirect("/");
+  } catch (error) {
+    return res.status(400).render("404", { pageTitle: "Room not found." });
+  }
 };
