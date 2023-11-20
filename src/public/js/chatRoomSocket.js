@@ -52,7 +52,8 @@ window.onload = function () {
     msgDiv.classList.add("msg");
 
     const avatarDiv = document.createElement("div");
-    avatarDiv.classList.add("avatar");
+    avatarDiv.classList.add("chat__avatar");
+    avatarDiv.setAttribute("username", user.name);
 
     const img = document.createElement("img");
     img.src = user.avatarURL;
@@ -60,6 +61,7 @@ window.onload = function () {
     img.setAttribute("width", "100%");
     img.setAttribute("height", "100%");
     avatarDiv.appendChild(img);
+
     msgDiv.appendChild(avatarDiv);
     msgDiv.appendChild(document.createTextNode(`${content}`));
 
@@ -73,18 +75,33 @@ window.onload = function () {
       msgDiv.classList.add("rcvd");
     }
     msgDiv.setAttribute("data-name-time", dataNameTime);
+    // msg::beform : data-name-time
     msgDiv.setAttribute("data-name", user.name);
     // if previous message is from the same user, hide the avatar
-    // and if not, show the avatar, and margin-top: 15px
+    // and if not, show the avatar, and margin-top: 15px, and show msg::before(data-name-time)
+
+    // const lastMessage = chat.lastElementChild;
+    // if (lastMessage) {
+    //   const lastMessageDataName = lastMessage.getAttribute("data-name");
+    //   if (lastMessageDataName === user.name) {
+    //     avatarDiv.style.visibility = "hidden";
+    //     msgDiv.style.marginTop = "0px";
+    //   } else {
+    //     avatarDiv.style.visibility = "visible";
+    //     msgDiv.style.marginTop = "15px";
+    //   }
+    // }
     const lastMessage = chat.lastElementChild;
     if (lastMessage) {
-      const lastMessageDataName = lastMessage.dataset.name;
+      const lastMessageDataName = lastMessage.getAttribute("data-name");
       if (lastMessageDataName === user.name) {
         avatarDiv.style.visibility = "hidden";
         msgDiv.style.marginTop = "0px";
+        msgDiv.classList.remove("show-name-time");
       } else {
         avatarDiv.style.visibility = "visible";
-        msgDiv.style.marginTop = "15px";
+        msgDiv.style.marginTop = "30px";
+        msgDiv.classList.add("show-name-time");
       }
     }
     chat.appendChild(msgDiv);
