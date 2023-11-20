@@ -108,14 +108,12 @@ export const postEdit = async (req, res) => {
   } = req;
   const pageTitle = "Edit Profile";
   let newAvatarURL = null;
-  if (defaultAvatar) {
-    newAvatarURL = `https://api.dicebear.com/7.x/identicon/svg?seed=${email}`;
-  } else {
-    if (file) {
+  if (file) {
+    if (defaultAvatar) {
+      newAvatarURL = `https://api.dicebear.com/7.x/identicon/svg?seed=${email}`;
+    } else {
       try {
         newAvatarURL = await ImgbbURL(file.path);
-        // delete original file in uploads folder
-        fs.unlinkSync(file.path);
       } catch (error) {
         return res.status(StatusCodes.BAD_REQUEST).render("users/edit", {
           pageTitle,
@@ -123,6 +121,8 @@ export const postEdit = async (req, res) => {
         });
       }
     }
+    // delete old avatar
+    fs.unlinkSync(file.path);
   }
   try {
     const user = await User.findByPk(id);
