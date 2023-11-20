@@ -4,11 +4,41 @@
 @import "avatars.css";
 @import "chatRoom.css";
 @import "roomCard.css";
+@import "profile.css";
+@import "edit.css";
 
 /* QuickReset */
 * {
   margin: 0;
   box-sizing: border-box;
+}
+
+header {
+  height: 8vh;
+  display: flex;
+  flex-direction: column;
+}
+
+body {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+main {
+  padding: 0;
+}
+
+nav {
+  margin-bottom: 5vh;
+}
+
+.container {
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 }
 
 .center {
@@ -20,12 +50,7 @@
   overflow: hidden;
 }
 
-.homeLink {
-  position: absolute;
-  /* Assuming you want to center it horizontally */
-  left: 50%;
-
-  /* Assuming you want to center it vertically as well */
-  /* Replace 50px with the amount you want to move to the left */
-  transform: translate(-50%) translateX(-170px) translateY(-50%);
+.home-link {
+  margin-bottom: 10px;
+  align-items: center;
 }

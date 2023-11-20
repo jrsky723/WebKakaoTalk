@@ -1,6 +1,7 @@
 include chat-room
 
 mixin chatRoomList(chatRooms)
+    div.chat-rooms
         each room in chatRooms
             +chatRoom(room, avatars)  
         else

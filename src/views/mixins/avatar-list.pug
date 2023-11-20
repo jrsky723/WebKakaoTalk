@@ -1,6 +1,6 @@
 
 mixin avatarList(users)
-    div.center.avatar-box
+    div.avatar-box
         .user-avatar__list
             each user in users
                   a.user-avatar(href=`/users/${user.id}` username=user.name style="background-image: url(" + user.avatarURL + ");")

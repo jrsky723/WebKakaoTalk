@@ -1,19 +1,35 @@
+.chat-rooms {
+  display: flex;
+  flex-direction: column;
+  justify-content: top;
+  align-items: center;
+  width: 400px;
+  overflow-y: auto;
+  padding: 10px 0px;
+  height: 60vh;
+  border: 1px solid #ddd;
+  border-radius: 3px;
+  top: 0%;
+  margin-bottom: 10px;
+}
+
 .room-card {
   border-radius: 20px;
   top: 0;
-  left: 50%;
-  max-width: 500px;
-  height: 100%;
+  width: 350px;
+  max-width: 400px;
   background: linear-gradient(0, #42a5f5, #ffff);
   border: 1px solid #ddd;
   align-items: center;
-  padding: 10px;
-  margin: auto;
+  padding: 5px;
+  margin: 5px 0px;
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
 }
 
 .button-container {
+  margin-top: 30px;
   display: flex;
   justify-content: space-between;
   width: 70%;
@@ -21,10 +37,12 @@
 
 .delete-room,
 .join-room {
-  padding: 8px 15px;
+  width: 70px;
+  padding: 8px 0px;
   border: none;
   color: white;
   font-weight: bold;
+  font-size: 1em;
   cursor: pointer;
   border-radius: 5px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
@@ -53,18 +71,29 @@
 
 .room-card__header {
   width: 100%;
+  height: 30px;
   margin-bottom: 10px;
-  padding: 5px 10px;
+  padding: 0px 10px;
   border-radius: 20px;
   background: var(--blue-gradient);
   border-bottom: 1px solid #aaa;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  text-align: center;
+}
+
+.room-host {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 80%;
 }
 
 .room-name {
-  font-size: 1.2em;
+  text-align: center;
+  overflow: hidden;
+  font-size: 1em;
   font-weight: bold;
   color: #fff;
   text-decoration: none;
@@ -73,6 +102,8 @@
 }
 
 .host-name {
+  display: inline-block;
+  overflow-x: hidden;
   font-size: 0.9em;
   color: #eee;
   text-decoration: none;
