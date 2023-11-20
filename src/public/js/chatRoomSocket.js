@@ -75,22 +75,8 @@ window.onload = function () {
       msgDiv.classList.add("rcvd");
     }
     msgDiv.setAttribute("data-name-time", dataNameTime);
-    // msg::beform : data-name-time
     msgDiv.setAttribute("data-name", user.name);
-    // if previous message is from the same user, hide the avatar
-    // and if not, show the avatar, and margin-top: 15px, and show msg::before(data-name-time)
 
-    // const lastMessage = chat.lastElementChild;
-    // if (lastMessage) {
-    //   const lastMessageDataName = lastMessage.getAttribute("data-name");
-    //   if (lastMessageDataName === user.name) {
-    //     avatarDiv.style.visibility = "hidden";
-    //     msgDiv.style.marginTop = "0px";
-    //   } else {
-    //     avatarDiv.style.visibility = "visible";
-    //     msgDiv.style.marginTop = "15px";
-    //   }
-    // }
     const lastMessage = chat.lastElementChild;
     if (lastMessage) {
       const lastMessageDataName = lastMessage.getAttribute("data-name");
@@ -103,6 +89,10 @@ window.onload = function () {
         msgDiv.style.marginTop = "30px";
         msgDiv.classList.add("show-name-time");
       }
+    } else {
+      avatarDiv.style.visibility = "visible";
+      msgDiv.style.marginTop = "5px";
+      msgDiv.classList.add("show-name-time");
     }
     chat.appendChild(msgDiv);
     chat.scrollTop = chat.scrollHeight;
@@ -161,5 +151,12 @@ window.onload = function () {
 
   socket.on("bye", (name) => {
     toast(`${name} left...`);
+  });
+
+  socket.on("refresh", () => {
+    toast("Room was deleted. You will be moved to home.");
+    setTimeout(() => {
+      window.location.href = "/";
+    }, 3000);
   });
 };

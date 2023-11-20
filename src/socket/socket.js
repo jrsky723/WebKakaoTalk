@@ -1,3 +1,4 @@
+import ChatRoom from "../models/ChatRoom";
 import Message from "../models/Message";
 import User from "../models/User";
 
@@ -10,9 +11,11 @@ const saveMessage = async (message) => {
       content,
     });
     console.log(`New message : ${newMessage.userId} : ${newMessage.content}`);
+    return true;
   } catch (err) {
     console.error(err);
     console.log("Message save failed");
+    return false;
   }
 };
 
@@ -97,7 +100,14 @@ const socketController = (io) => {
 
     socket.on("new_message", async (message) => {
       socket.to(message.chatRoomId).emit("new_message", message);
-      await saveMessage(message);
+      const saved = await saveMessage(message);
+      if (!saved) {
+        // room was deleted all socket in room should leave
+        if ((await ChatRoom.findByPk(message.chatRoomId)) === null) {
+          userRoom.delete(message.chatRoomId);
+          socket.emit("refresh");
+        }
+      }
     });
     socket.on("set_user", (user) => (socket["user"] = user));
     socket.on("disconnect", () => {

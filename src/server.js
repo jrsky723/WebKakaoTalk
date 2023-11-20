@@ -44,4 +44,8 @@ app.use("/users", userRouter);
 app.use("/chats", chatRouter);
 app.use("/uploads", express.static("uploads"));
 
+app.get("*", (req, res) => {
+  res.status(404).render("404", { pageTitle: "404 Not Found" });
+});
+
 export default server;
