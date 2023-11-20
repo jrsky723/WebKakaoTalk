@@ -1,3 +1,5 @@
+include mixins/message
+
 doctype html
 html(lang="ko")
     head
@@ -5,16 +7,23 @@ html(lang="ko")
         meta(name="viewport" content="width=device-width, initial-scale=1 minimum-scale=1")
         title #{pageTitle} | Web Kakao Talk
         link(rel="stylesheet", href="https://unpkg.com/mvp.css")
-        link(rel='stylesheet', href='/css/style.css')
+        link(rel='stylesheet', href='/static/css/styles.css')
     body
         div.container
             header
                 h1=pageTitle
             main
+                if messages.error
+                    +message("error", messages.error)
+                if messages.info
+                    +message("info", messages.info)
+                if messages.success
+                    +message("sucess", messages.success)
                 div.center
                     div.home-link
-                        a.homeLink(href="/") Home  
+                        a.homeLink(href="/") Home 
                     if errorMessage
                         span=errorMessage
                     block content
+        script(src="/static/js/main.js")
         block scripts

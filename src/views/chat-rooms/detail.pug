@@ -8,8 +8,8 @@ block content
             input(placeholder="message", required, type="text")
             input(type="submit", value="Send")
 block scripts
-    script(src='/socket.io/socket.io.js')  
-    script(src='/js/chatRoomSocket.js')
+    script(src="/socket.io/socket.io.js")  
+    script(src="/static/js/chatRoomSocket.js")
     script.
         const chatRoom = !{JSON.stringify(chatRoom)};
         const loggedInUser = !{JSON.stringify(loggedInUser)};

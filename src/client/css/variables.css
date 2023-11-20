@@ -2,4 +2,5 @@
   --blue: #42a5f5;
   --gray: #555;
   --blue-gradient: linear-gradient(90deg, #42a5f5, #2671ff);
+  --red-gradient: linear-gradient(90deg, #ff6d6d, #ff3d3d);
 }

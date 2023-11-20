@@ -129,10 +129,6 @@ window.onload = function () {
     addMessage(message);
   });
 
-  socket.onAny((event) => {
-    console.log(`Socket Event: ${event}`);
-  });
-
   // socket event functions
   socket.on("get_messages", (messages) => {
     messages.forEach((message) => addMessage(message));

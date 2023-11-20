@@ -131,3 +131,6 @@ dist
 .pnp.*
 .env
 /uploads
+/build
+/assets
+```

@@ -1,3 +1,4 @@
+import "regenerator-runtime";
 import "dotenv/config";
 import sequelize from "./db";
 import setAssociations from "./models";

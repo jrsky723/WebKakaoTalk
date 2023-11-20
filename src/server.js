@@ -6,6 +6,7 @@ import socketController from "./socket/socket";
 import express from "express";
 import morgan from "morgan";
 import session from "express-session";
+import flash from "express-flash";
 import ConnectSessionSequelize from "connect-session-sequelize";
 import sequelize from "./db";
 import rootRouter from "./routers/rootRouter";
@@ -38,11 +39,13 @@ app.use(
   })
 );
 
+app.use(flash());
 app.use(localsMiddleware);
+app.use("/uploads", express.static("uploads"));
+app.use("/static", express.static("assets"));
 app.use("/", rootRouter);
 app.use("/users", userRouter);
 app.use("/chats", chatRouter);
-app.use("/uploads", express.static("uploads"));
 
 app.get("*", (req, res) => {
   res.status(404).render("404", { pageTitle: "404 Not Found" });
