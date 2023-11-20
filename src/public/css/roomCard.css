@@ -66,10 +66,18 @@
 .room-name {
   font-size: 1.2em;
   font-weight: bold;
-  color: #fff; /* 밝은 글자 색상 */
+  color: #fff;
   text-decoration: none;
   padding-left: 10px;
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5); /* 검은색 그림자 */
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.host-name {
+  font-size: 0.9em;
+  color: #eee;
+  text-decoration: none;
+  padding-left: 10px;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
 }
 
 .usersCount {

@@ -7,6 +7,10 @@ const setAssociations = () => {
   User.belongsToMany(ChatRoom, { through: "UserChatRoom" });
   ChatRoom.belongsToMany(User, { through: "UserChatRoom" });
 
+  // User <-> ChatRoom (host)
+  User.hasMany(ChatRoom, { foreignKey: "hostId" });
+  ChatRoom.belongsTo(User, { as: "host", foreignKey: "hostId" });
+
   // User <-> Message
   User.hasMany(Message, { foreignKey: "userId" });
   Message.belongsTo(User, { foreignKey: "userId" });

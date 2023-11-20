@@ -4,10 +4,17 @@ import User from "../models/User";
 export const home = async (req, res) => {
   const pageTitle = "Web Chat";
   const chatRooms = await ChatRoom.findAll({
-    include: {
-      model: User,
-      attributes: ["id", "name", "avatarURL"],
-    },
+    include: [
+      {
+        model: User,
+        attributes: ["id", "name", "avatarURL"],
+      },
+      {
+        model: User,
+        as: "host",
+        attributes: ["id", "name", "avatarURL"],
+      },
+    ],
   });
   return res.render("home", {
     pageTitle,
