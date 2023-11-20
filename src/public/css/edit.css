@@ -1,0 +1,14 @@
+.editForm {
+  padding: 10px;
+  margin-top: 10px;
+}
+.editForm label {
+  font-size: 1rem;
+}
+.editForm input {
+  padding: 5px;
+  margin-bottom: 10px;
+}
+input[type="checkbox"] {
+  vertical-align: center;
+}

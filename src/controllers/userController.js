@@ -103,21 +103,25 @@ export const postEdit = async (req, res) => {
     session: {
       user: { id, avatarURL },
     },
-    body: { name, email },
+    body: { name, email, password, defaultAvatar },
     file,
   } = req;
   const pageTitle = "Edit Profile";
   let newAvatarURL = null;
-  if (file) {
-    try {
-      newAvatarURL = await ImgbbURL(file.path);
-      // delete original file in uploads folder
-      fs.unlinkSync(file.path);
-    } catch (error) {
-      return res.status(StatusCodes.BAD_REQUEST).render("users/edit", {
-        pageTitle,
-        errorMessage: error.message,
-      });
+  if (defaultAvatar) {
+    newAvatarURL = `https://api.dicebear.com/7.x/identicon/svg?seed=${email}`;
+  } else {
+    if (file) {
+      try {
+        newAvatarURL = await ImgbbURL(file.path);
+        // delete original file in uploads folder
+        fs.unlinkSync(file.path);
+      } catch (error) {
+        return res.status(StatusCodes.BAD_REQUEST).render("users/edit", {
+          pageTitle,
+          errorMessage: error.message,
+        });
+      }
     }
   }
   try {
@@ -126,6 +130,7 @@ export const postEdit = async (req, res) => {
       name,
       email,
       avatarURL: newAvatarURL || avatarURL,
+      password: password ? await bcrypt.hash(password, 10) : user.password,
     });
     req.session.user = user;
     return res.redirect("/users/edit");
@@ -150,4 +155,28 @@ const ImgbbURL = async (filePath) => {
   }
 };
 
-export const remove = (req, res) => res.send("Remove User");
+export const getDelete = (req, res) => {
+  return res.render("users/delete", { pageTitle: "Delete Profile" });
+};
+
+export const postDelete = async (req, res) => {
+  const {
+    session: {
+      user: { id },
+    },
+    body: { password },
+  } = req;
+  const pageTitle = "Delete Profile";
+  const user = await User.findByPk(id);
+  const ok = await bcrypt.compare(password, user.password);
+  if (!ok) {
+    return res.status(StatusCodes.BAD_REQUEST).render("users/delete", {
+      pageTitle,
+      errorMessage: "Password is incorrect.",
+    });
+  }
+  await user.destroy();
+  req.session.destroy(() => {
+    return res.redirect("/");
+  });
+};

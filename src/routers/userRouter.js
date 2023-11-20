@@ -3,12 +3,13 @@ import {
   getLogin,
   getJoin,
   logout,
-  remove,
   see,
   postJoin,
   postLogin,
   getEdit,
   postEdit,
+  getDelete,
+  postDelete,
 } from "../controllers/userController";
 import {
   avatarUpload,
@@ -19,14 +20,21 @@ import {
 const userRouter = express.Router();
 
 userRouter.get("/logout", protectorMiddleware, logout);
+
 userRouter
   .route("/edit")
   .all(protectorMiddleware)
   .get(getEdit)
   .post(avatarUpload.single("avatar"), postEdit);
 
-userRouter.get("/remove", remove);
+userRouter
+  .route("/delete")
+  .all(protectorMiddleware)
+  .get(getDelete)
+  .post(postDelete);
+
 userRouter.route("/join").all(publicOnlyMiddleware).get(getJoin).post(postJoin);
+
 userRouter
   .route("/login")
   .all(publicOnlyMiddleware)

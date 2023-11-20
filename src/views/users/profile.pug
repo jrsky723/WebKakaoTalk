@@ -1,11 +1,18 @@
 extends ../base
 
 block content
-    div.center
-        h2.profile-title= `${user.name}'s Profile`
+    h2.profile-title= `${user.name}'s Profile`
+    if loggedInUser && loggedInUser.id === user.id
+        div.profile__links
+            div.profile__link
+                a(href="edit") Edit
+            div.profile__link    
+                a(href="delete") Delete 
+    div.profile__info
         section
             aside
-                img.profile-image(src= user.avatarURL, alt= user.name, width="200", height="200")
+                div.profile__image-container
+                    img(src= user.avatarURL, alt= user.name)
             aside
                 label Profile Email:
                 span.profile-email= user.email
@@ -15,4 +22,4 @@ block content
             aside
                 label Last Updated:
                 span.profile-updated= user.updatedAt
-        a(href="edit") Edit Profile
+        

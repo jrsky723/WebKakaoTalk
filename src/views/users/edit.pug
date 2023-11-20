@@ -1,18 +1,26 @@
 extends ../base
 
 block content
-    div.center 
-        img(src=loggedInUser.avatarURL, alt=loggedInUser.name, width="200vh", height="200vh")
-        br
-        br
-        form(method="POST", enctype="multipart/form-data")
-            label(for="name") Name:
-            input#name(type="text", name="name", value=loggedInUser.name)
-            
-            label(for="email") Email:
-            input#email(type="email", name="email", value=loggedInUser.email)
+    img(src=loggedInUser.avatarURL, alt=loggedInUser.name, width="150vh", height="150vh")
+    form.editForm(method="POST", enctype="multipart/form-data")
+        label(for="name") Name:
+        input#name(type="text", name="name", value=loggedInUser.name, maxlength="15")
+        
+        label(for="email") Email:
+        input#email(type="email", name="email", value=loggedInUser.email, maxlength="50")
 
-            label(for="avatar") Avatar:
-            input#avatar(type="file", name="avatar" accept="image/*")
+        label(for="password") Password:
+        input#password(type="password", name="password", placeholder="Enter new password", maxlength="20")
 
-            button(type="submit") Update Profile
+
+        label(for="avatar") Avatar:
+        input#avatar(type="file", name="avatar" accept="image/*")
+        
+        label(for="defaultAvatar") Default Avatar: 
+            input#defaultAvatar(type="checkbox", name="defaultAvatar")
+
+        
+        button(type="submit") Update Profile
+
+      
+
