@@ -1,10 +1,10 @@
 import express from "express";
 import {
   getLogin,
-  getJoin,
+  getSignUp,
   logout,
   see,
-  postJoin,
+  postSignUp,
   postLogin,
   getEdit,
   postEdit,
@@ -33,7 +33,11 @@ userRouter
   .get(getDelete)
   .post(postDelete);
 
-userRouter.route("/join").all(publicOnlyMiddleware).get(getJoin).post(postJoin);
+userRouter
+  .route("/sign-up")
+  .all(publicOnlyMiddleware)
+  .get(getSignUp)
+  .post(postSignUp);
 
 userRouter
   .route("/login")

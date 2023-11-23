@@ -1,0 +1,15 @@
+extends ../base
+
+block content
+    form#signUp-form(method="POST")
+        input#nick-name(placeholder="Nickname", name= "name", type="text", required, maxlength="15")
+        input#user-name(placeholder="Username", name="username", type="text", required, maxlength="20")
+        input#password(placeholder="Password", name="password", type="password", required, maxlength="20")
+        input#password2(placeholder="Confirm Password", name="password2", type="password", required, maxlength="20")
+        input(type="submit", value="Sign Up")
+    hr
+    div
+        span Already have an account? 
+        a(href="/users/login") Login in now &rarr;
+block scripts
+    script(src="/static/js/signUp.js")

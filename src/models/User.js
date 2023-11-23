@@ -12,11 +12,6 @@ const User = sequelize.define("User", {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  email: {
-    type: DataTypes.STRING,
-    allowNull: false,
-    unique: true,
-  },
   name: {
     type: DataTypes.STRING,
     allowNull: false,
@@ -38,7 +33,7 @@ const User = sequelize.define("User", {
 
 User.beforeCreate(async (user) => {
   if (!user.avatarURL) {
-    user.avatarURL = `https://api.dicebear.com/7.x/identicon/svg?seed=${user.email}`;
+    user.avatarURL = `https://api.dicebear.com/7.x/identicon/svg?seed=${user.username}`;
   }
   user.password = await bcrypt.hash(user.password, 10);
 });

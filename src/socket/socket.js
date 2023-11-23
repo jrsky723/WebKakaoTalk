@@ -28,7 +28,7 @@ const getMessages = async (roomId) => {
         {
           model: User,
           as: "User",
-          attributes: ["name", "avatarURL"],
+          attributes: ["name", "avatarURL", "id"],
         },
       ],
     });

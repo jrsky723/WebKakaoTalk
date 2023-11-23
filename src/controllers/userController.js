@@ -15,30 +15,30 @@ export const see = async (req, res) => {
   return res.render("users/profile", { pageTitle, user });
 };
 
-export const getJoin = (req, res) => {
-  return res.render("users/join", { pageTitle: "Join" });
+export const getSignUp = (req, res) => {
+  return res.render("users/sign-up", { pageTitle: "Sign Up" });
 };
-export const postJoin = async (req, res) => {
-  const { name, username, email, password, password2 } = req.body;
-  const pageTitle = "Join";
-  // password === password2
-  if (password !== password2) {
-    return res.status(StatusCodes.BAD_REQUEST).render("users/join", {
-      pageTitle,
-      errorMessage: "Password confirmation does not match.",
-    });
-  }
-  // check if username or email exists
+export const postSignUp = async (req, res) => {
+  const { name, username, password, password2 } = req.body;
+  const pageTitle = "Sign Up";
+  // // password === password2
+  // if (password !== password2) {
+  //   return res.status(StatusCodes.BAD_REQUEST).render("users/sign-up", {
+  //     pageTitle,
+  //     errorMessage: "Password confirmation does not match.",
+  //   });
+  // }
+  // check if username exists
   const exists = await User.findOne({
     where: {
-      [Op.or]: [{ username }, { email }],
+      username,
     },
     raw: true,
   });
   if (exists) {
-    return res.status(StatusCodes.BAD_REQUEST).render("users/join", {
+    return res.status(StatusCodes.BAD_REQUEST).render("users/sign-up", {
       pageTitle,
-      errorMessage: "This username/email is already taken.",
+      errorMessage: "This username is already taken.",
     });
   }
 
@@ -46,7 +46,6 @@ export const postJoin = async (req, res) => {
     const user = await User.create({
       name,
       username,
-      email,
       password,
     });
     req.session.loggedIn = true;
@@ -55,7 +54,7 @@ export const postJoin = async (req, res) => {
       return res.redirect("/");
     });
   } catch (error) {
-    return res.status(StatusCodes.BAD_REQUEST).render("users/join", {
+    return res.status(StatusCodes.BAD_REQUEST).render("users/sign-up", {
       pageTitle,
       errorMessage: error.message,
     });
@@ -101,17 +100,18 @@ export const getEdit = (req, res) => {
 export const postEdit = async (req, res) => {
   const {
     session: {
-      user: { id, avatarURL },
+      user: { id, avatarURL, username },
     },
-    body: { name, email, password, defaultAvatar },
+    body: { name, password, defaultAvatar },
     file,
   } = req;
   const pageTitle = "Edit Profile";
   let newAvatarURL = null;
-  if (file) {
-    if (defaultAvatar) {
-      newAvatarURL = `https://api.dicebear.com/7.x/identicon/svg?seed=${email}`;
-    } else {
+
+  if (defaultAvatar) {
+    newAvatarURL = `https://api.dicebear.com/7.x/identicon/svg?seed=${username}`;
+  } else {
+    if (file) {
       try {
         newAvatarURL = await ImgbbURL(file.path);
       } catch (error) {
@@ -120,20 +120,20 @@ export const postEdit = async (req, res) => {
           errorMessage: error.message,
         });
       }
+      fs.unlinkSync(file.path);
     }
-    // delete old avatar
-    fs.unlinkSync(file.path);
   }
   try {
     const user = await User.findByPk(id);
     await user.update({
       name,
-      email,
       avatarURL: newAvatarURL || avatarURL,
       password: password ? await bcrypt.hash(password, 10) : user.password,
     });
     req.session.user = user;
-    return res.redirect("/users/edit");
+    req.session.save(() => {
+      return res.redirect("/users/edit");
+    });
   } catch (error) {
     return res.render("users/edit", {
       pageTitle,

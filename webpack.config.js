@@ -8,6 +8,7 @@ module.exports = {
     main: BASE_JS + "main.js",
     chatRoomSocket: BASE_JS + "chatRoomSocket.js",
     home: BASE_JS + "home.js",
+    signUp: BASE_JS + "signUp.js",
   },
   plugins: [
     new MiniCssExtractPlugin({

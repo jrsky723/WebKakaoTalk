@@ -5,9 +5,6 @@ block content
     form.editForm(method="POST", enctype="multipart/form-data")
         label(for="name") Name:
         input#name(type="text", name="name", value=loggedInUser.name, maxlength="15")
-        
-        label(for="email") Email:
-        input#email(type="email", name="email", value=loggedInUser.email, maxlength="50")
 
         label(for="password") Password:
         input#password(type="password", name="password", placeholder="Enter new password", maxlength="20")

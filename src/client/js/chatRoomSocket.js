@@ -51,18 +51,12 @@ window.onload = function () {
     const msgDiv = document.createElement("div");
     msgDiv.classList.add("msg");
 
-    const avatarDiv = document.createElement("div");
-    avatarDiv.classList.add("chat__avatar");
-    avatarDiv.setAttribute("username", user.name);
-
-    const img = document.createElement("img");
-    img.src = user.avatarURL;
-    img.alt = `${user.name}'s avatar`;
-    img.setAttribute("width", "100%");
-    img.setAttribute("height", "100%");
-    avatarDiv.appendChild(img);
-
-    msgDiv.appendChild(avatarDiv);
+    const avatar = document.createElement("a");
+    avatar.classList.add("chat__avatar");
+    avatar.setAttribute("username", user.name);
+    avatar.style.backgroundImage = `url(${user.avatarURL})`;
+    avatar.href = `/users/${user.id}`;
+    msgDiv.appendChild(avatar);
     msgDiv.appendChild(document.createTextNode(`${content}`));
 
     const formatedDate = formatDate(new Date(message.createdAt));
@@ -81,16 +75,16 @@ window.onload = function () {
     if (lastMessage) {
       const lastMessageDataName = lastMessage.getAttribute("data-name");
       if (lastMessageDataName === user.name) {
-        avatarDiv.style.visibility = "hidden";
+        avatar.style.visibility = "hidden";
         msgDiv.style.marginTop = "0px";
         msgDiv.classList.remove("show-name-time");
       } else {
-        avatarDiv.style.visibility = "visible";
+        avatar.style.visibility = "visible";
         msgDiv.style.marginTop = "30px";
         msgDiv.classList.add("show-name-time");
       }
     } else {
-      avatarDiv.style.visibility = "visible";
+      avatar.style.visibility = "visible";
       msgDiv.style.marginTop = "5px";
       msgDiv.classList.add("show-name-time");
     }
