@@ -18,7 +18,7 @@
 
 > Inside Chat Room
 
-- Read Messages (Login Required)
+- Read Messages
 - Send Messages (Login Required)
 - User Join/Leave Notifications
 
