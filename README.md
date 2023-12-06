@@ -37,9 +37,11 @@
 
 ## Installation
 
-- npm install
-- npm build
-- npm start
+```bash
+$ npm install
+$ npm build
+$ npm start
+```
 - You must create .env file in root directory
   - .env file example is below
 
