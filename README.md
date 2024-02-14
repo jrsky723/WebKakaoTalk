@@ -8,8 +8,6 @@
 
 - Real-time chat application using Express.js + Socket.io + MySQL(Sequelize) + Pug + Pure.css
 
-- 시연 영상 : [Youtube](https://youtu.be/4-LM6iWoJUs?si=sCIVf6dQv9dO0TVB)
-
 ## Features
 
 > Chat Room List
